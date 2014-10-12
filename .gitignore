@@ -1,0 +1,6 @@
+*.def
+*.o
+*.obj
+*.exe
+*build*
+*Build*

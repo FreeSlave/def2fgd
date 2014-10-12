@@ -1,0 +1,7 @@
+C++ = g++ ;
+LINK = $(C++) ;
+
+program_name = def2fgd$(SUFEXE) ;
+SOURCES = main.cpp entity.cpp defreader.cpp ;
+
+Main $(program_name) : $(SOURCES) ;
