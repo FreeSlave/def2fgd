@@ -9,7 +9,7 @@ void writefgd(const char* fileName, const std::vector<Entity>& entities)
     std::ofstream stream(fileName);
     if (!stream.is_open())
     {
-        throw std::runtime_error("Could open file");
+        throw std::runtime_error("Could not open file");
     }
     else
     {
@@ -33,20 +33,30 @@ void writefgd(const char* fileName, const std::vector<Entity>& entities)
                 stream << entity.size[5] << ')';
                 
                 if (entity.name != "light")
-                    stream << " color(" << entity.color[0] << ' ' << entity.color[1] << ' ' << entity.color[2] << ")";
+                {
+                    stream << " color(" << entity.color[0] << ' ' << entity.color[1] << ' ' << entity.color[2] << ") ";
+                    
+                    for (std::vector<Key>::const_iterator it = entity.keys.begin(); it != entity.keys.end(); ++it)
+                    {
+                        if (it->name == "angle")
+                        {
+                            stream << "flags(Angle) ";
+                            break;
+                        }
+                    }
+                    
+                    if (!entity.model.empty())
+                    {
+                        stream << "studio(\"" << entity.model << "\") ";
+                    }
+                }
+                else
+                {
+                    stream << " iconsprite(\"sprites/light.spr\") flags(Light) ";
+                }
             }
             
-            if (entity.name == "light")
-                stream << " iconsprite(\"sprites/light.spr\") flags(Light) ";
-            else
-                stream << " flags(Angle) ";
-            
-            if (!entity.model.empty())
-            {
-                stream << "studio(\"" << entity.model << "\")";
-            }
-            
-            stream << " = " << entity.name;
+            stream << "= " << entity.name;
             if (!entity.description.empty())
                 stream << " : \"" << entity.description << "\"";
             stream << "\n";
@@ -56,17 +66,26 @@ void writefgd(const char* fileName, const std::vector<Entity>& entities)
                 const Key& key = entity.keys[j];
                 stream << "\t" << key.name;
                 if (key.name == "target")
+                {
                     stream << "(target_destination)";
+                    stream << " : Target : : \"" << key.description << "\"";
+                }
                 else if (key.name == "targetname")
+                {
                     stream << "(target_source)";
-                else if (key.name == "light")
-                    stream << "(integer) : \"Brightness\" : 300";
+                    stream << " : Name : : \"" << key.description << "\"";
+                }
                 else if (key.name == "_color")
-                    stream << "(color1) : \"RGB color\" : \"1 1 0.5\"";
+                {
+                    stream << "(color1) : \"RGB color\" : \"1 1 0.5\" : " << "\"" << key.description << "\"";
+                }
                 else
                 {
+                    std::string name = key.name;
+                    if (!name.empty())
+                        name[0] = toupper(name[0]);
                     stream << "(string)";
-                    stream << " : : : \"" << key.description << "\"";
+                    stream << " : " << name << " : : \"" << key.description << "\"";
                 }
                 
                 stream << "\n";
