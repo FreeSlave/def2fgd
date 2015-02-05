@@ -34,7 +34,7 @@ $(TARGET): $(OBJS)
 clean:
 	rm -rf $(OBJ_DIR)
 
-cleanall: 
+distclean: 
 	rm -rf $(BUILD_DIR)
 
 install:
