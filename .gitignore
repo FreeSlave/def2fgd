@@ -3,3 +3,8 @@
 *.obj
 *.exe
 build*
+ipch
+*.suo
+*.sdf
+*.user
+*.opensd

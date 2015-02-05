@@ -38,10 +38,22 @@ Some useful examples showing usage of user options:
     make BUILD_DIR=build-static USER_FLAGS=-static-libstdc++ # linking to libstdc++ statically
     make BUILD_DIR=build-debug USER_FLAGS=-ggdb # build with debug symbols
 
+## Building on Windows using MinGW
+
+Use **mingw32-make** instead of make everywhere. MinGW\bin must be in your PATH environment variable.
+
+## Building on Windows using Visual Studio 2010
+
+Solution for Visual Studio 2010 is placed in **msvc** directory. Open def2fgd.sln, change configuration to Release, then Build -> Build Solution. def2fgd.exe should appear in build-msvc-release\bin.
+
 ## Usage
 
-Open terminal (command line) and type:
+Open terminal and type:
 
     /path/to/def2fgd input-file output-file
+	
+On Windows open cmd.exe and type:
+
+	path\to\def2fgd.exe input-file output-file
 
 Where input-file is path to .def or .ent file and output-file is name for output fgd file. 
