@@ -1,3 +1,5 @@
+//Copyright (c) 2015 Roman Chistokhodov
+
 #include <algorithm>
 #include <cctype>
 #include <cstdlib>

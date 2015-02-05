@@ -1,3 +1,5 @@
+//Copyright (c) 2015 Roman Chistokhodov
+
 #ifndef ENTITY_H
 #define ENTITY_H
 

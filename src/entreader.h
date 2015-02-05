@@ -1,3 +1,5 @@
+//Copyright (c) 2015 Roman Chistokhodov
+
 #ifndef ENTREADER_H
 #define ENTREADER_H
 

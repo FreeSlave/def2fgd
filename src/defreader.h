@@ -1,3 +1,5 @@
+//Copyright (c) 2015 Roman Chistokhodov
+
 #ifndef DEFREADER_H
 #define DEFREADER_H
 
