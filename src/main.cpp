@@ -60,7 +60,21 @@ void writefgd(std::ostream& stream, const std::vector<Entity>& entities)
         
         stream << "= " << entity.name;
         if (!entity.description.empty()) {
-            stream << " : \"" << entity.description << "\"";
+            const size_t tokenLimit = 2047;
+            
+            if (entity.description.size() > tokenLimit) {
+                stream << " : \"" << entity.description.substr(0, tokenLimit) << "\"";
+                
+                size_t current = tokenLimit;
+                while(current <= entity.description.size()) {
+                    size_t howMany = entity.description.size() - current < tokenLimit ? entity.description.size() - current : tokenLimit;
+                    stream << " + \"" << entity.description.substr(current, tokenLimit) << "\"";
+                    current += tokenLimit;
+                }
+                
+            } else {
+                stream << " : \"" << entity.description << "\"";
+            }
         }
         stream << "\n";
         stream << "[\n";
@@ -200,7 +214,7 @@ int main(int argc, char** argv)
             } else if (extension && strcmp(extension, ".def") == 0) {
                 format = "def";
             } else {
-                fprintf(stderr, "Could not detect input format. Use -f option to explicitly set it.\n");
+                fprintf(stderr, "Could not detect input format. Use -format option to explicitly set it.\n");
                 return EXIT_FAILURE;
             }
         } else {

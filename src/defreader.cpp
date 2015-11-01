@@ -123,7 +123,6 @@ std::vector<Entity> readDefFile(std::istream& stream)
     std::vector<Entity> toReturn;
     
     bool inKeys = false;
-    bool shouldPush = false;
     size_t lineNum = 0;
     std::string line;
     
@@ -143,22 +142,24 @@ std::vector<Entity> readDefFile(std::istream& stream)
         std::string::iterator end = line.end();
         std::string::iterator start = it;
         
-        if (shouldPush) {
-            toReturn.push_back(entity);
-            entity = Entity();
-            inKeys = false;
-            shouldPush = false;
-        }
-        
         if (inKeys) {
             if (line.size() > 1)
             {
+                bool shouldPush = false;
+                
                 if (line[0] == '*' && line[1] == '/') {
                     shouldPush = true;
                 }
                 if (line[line.size()-2] == '*' && line[line.size()-1] == '/') {
                     line.erase(line.end()-2, line.end());
                     shouldPush = true;
+                }
+                
+                if (shouldPush) {
+                    toReturn.push_back(entity);
+                    entity = Entity();
+                    inKeys = false;
+                    shouldPush = false;
                 }
             }
             
@@ -181,12 +182,23 @@ std::vector<Entity> readDefFile(std::istream& stream)
                         keyname = std::string(start, it);
                         it++;
                     }
-                    
                 } else {
                     it = skipAlpha(it, end);
                     keyname = std::string(start, it);
                 }
+                
                 it = skipSpaces(it, end);
+                std::string* found = std::find(entity.spawnflags, entity.spawnflags+Entity::SpawnFlagNum, keyname);
+                if (found != entity.spawnflags+Entity::SpawnFlagNum) {
+                    
+                    if (it != end && *it == ':') {
+                        it++;
+                        it = skipSpaces(it, end);
+                    }
+                    
+                    entity.flagsdescriptions[found-entity.spawnflags] = withoutQuotes(std::string(it, end));
+                    continue;
+                }
                 
                 if (keyname == "model" && *it == '=')
                 {
@@ -223,33 +235,24 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                 entity.description += "\\n\\n";
                                 entity.description += withoutQuotes(line);
                             }
-                            it = end;
+                            continue;
                         }
-                    }
+                    } 
                     if (it != end && (*it == ':' || *begin == '\"'))
                     {
                         if (*it == ':') {
                             it++;
                         }
-                        
                         it = skipSpaces(it, end);
-                        start = it;
-                        while(it != end)
-                            it++;
-                        std::string description = withoutQuotes(std::string(start, it));
-                        std::string* found = std::find(entity.spawnflags, entity.spawnflags+Entity::SpawnFlagNum, keyname);
-                        
-                        if (found != entity.spawnflags+Entity::SpawnFlagNum) //it's spawnflag
-                            entity.flagsdescriptions[found-entity.spawnflags] = description;
-                        else //it's field
-                            entity.keys.push_back(Key(keyname, description));
+                        std::string description = withoutQuotes(std::string(it, end));
+                        entity.keys.push_back(Key(keyname, description));
                     }
                 }
             } else if (line[0] == ' ') {
                 if (entity.description.empty()) {
                     entity.description = withoutQuotes(line);
                 } else {
-                    entity.description += "\\n\\n";
+                    entity.description += "\\n";
                     entity.description += withoutQuotes(line);
                 }
             }
