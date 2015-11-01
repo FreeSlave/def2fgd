@@ -101,7 +101,6 @@ void writefgd(std::ostream& stream, const std::vector<Entity>& entities, const F
                 
                 size_t current = tokenLimit;
                 while(current <= entity.description.size()) {
-                    size_t howMany = entity.description.size() - current < tokenLimit ? entity.description.size() - current : tokenLimit;
                     stream << " + \"" << entity.description.substr(current, tokenLimit) << "\"";
                     current += tokenLimit;
                 }
@@ -183,8 +182,8 @@ void printHelp(const char* programName)
             "  -format format     specify format of input: def or ent\n"
             "  -bob               automatically add bobparms for weapons, items and ammo\n"
             "  -help              display this help and exit\n"
-            "  -version           output version information and exit\n"
-            "  -- [arguments...]  treat arguments as positional arguments\n"
+            "  -version           show version information and exit\n"
+            "  -- [arguments...]  treat the rest of arguments as positional arguments\n"
             "\n"
             "With no INPUT-FILE or when INPUT-FILE is -, read standard input.\n"
             "With no OUTPUT-FILE, write to standard output.\n"

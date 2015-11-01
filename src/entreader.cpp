@@ -110,6 +110,11 @@ std::vector<Entity> readEntFile(std::istream& stream)
         if (boxAttr)
             readBox(boxAttr->value(), boxAttr->value_size(), entity.box);
         
+        xml_attribute<>* modelAttr = entityNode->first_attribute("model");
+        if (modelAttr) {
+            entity.model = valueString(modelAttr);
+        }
+        
         for (xml_node<>* keyNode = entityNode->first_node(); keyNode; keyNode = keyNode->next_sibling())
         {
             if (hasName(keyNode, "flag"))
@@ -142,7 +147,7 @@ std::vector<Entity> readEntFile(std::istream& stream)
             
             
             xml_node<>* lastNode = entityNode->last_node();
-            if (lastNode)
+            if (lastNode && entity.model.empty())
             {
                 std::string val = valueString(lastNode);
                 size_t pos = val.find("modeldisabled=");
