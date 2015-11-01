@@ -1,0 +1,12 @@
+Package: def2fgd
+Version: 1.0-1
+Architecture: i386
+Maintainer: Roman Chistokhodov <freeslave93@gmail.com>
+Installed-Size: 120
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0)
+Section: misc
+Priority: optional
+Description: convert .def and .ent to .fgd
+ def2fgd converts .def.and .ent files
+ used by GtkRadiant and Netradiant to .fgd
+ used by Jackhammer editor.
