@@ -123,6 +123,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
     std::vector<Entity> toReturn;
     
     bool inKeys = false;
+    bool shouldPush = false;
     size_t lineNum = 0;
     std::string line;
     
@@ -142,24 +143,21 @@ std::vector<Entity> readDefFile(std::istream& stream)
         std::string::iterator end = line.end();
         std::string::iterator start = it;
         
+        if (shouldPush) {
+            toReturn.push_back(entity);
+            entity = Entity();
+            inKeys = false;
+            shouldPush = false;
+        }
+        
         if (inKeys) {
             if (line.size() > 1)
             {
-                bool shouldPush = false;
-                
                 if (line[0] == '*' && line[1] == '/') {
                     shouldPush = true;
-                }
-                if (line[line.size()-2] == '*' && line[line.size()-1] == '/') {
+                } else if (line[line.size()-2] == '*' && line[line.size()-1] == '/') {
                     line.erase(line.end()-2, line.end());
                     shouldPush = true;
-                }
-                
-                if (shouldPush) {
-                    toReturn.push_back(entity);
-                    entity = Entity();
-                    inKeys = false;
-                    shouldPush = false;
                 }
             }
             
@@ -330,5 +328,11 @@ std::vector<Entity> readDefFile(std::istream& stream)
             }
         }
     }
+    
+    if (shouldPush) {
+        toReturn.push_back(entity);
+        entity = Entity();
+    }
+    
     return toReturn;
 }

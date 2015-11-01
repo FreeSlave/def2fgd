@@ -12,17 +12,21 @@ converts GtkRadiant and NetRadiant .def
 and .ent files to Jackhammer .fgd.
 .SH OPTIONS
 .TP
+\fB\-format format\fP
+Specify format of input. Valid values are def and ent. 
+By default format is detected from input file extension.
+
+.TP
+\fB\-bob\fP
+automatically add bobparms for weapons, items and ammo
+
+.TP
 \fB\-help\fP
 Show help message and exit
 
 .TP
 \fB\-version\fP
 Show version information and exit
-
-.TP
-\fB\-format format\fP
-Specify format of input. Valid values are def and ent. 
-By default format is detected from input file extension.
 
 When no output-file given, standard output is used.
 
