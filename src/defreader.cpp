@@ -94,6 +94,13 @@ namespace
         }
         return it;
     }
+    
+    static void stripRight(std::string& str)
+    {
+        if (str.size() && str[str.size()-1] == '\r') {
+            str.resize(str.size()-1);
+        }
+    }
 }
 
 DefReadError::DefReadError(const std::string& what, size_t line, size_t column) : std::runtime_error(what), _line(line), _column(column)
@@ -111,200 +118,214 @@ size_t DefReadError::column() const
     return _column;
 }
 
-std::vector<Entity> readDefFile(const char* fileName)
+std::vector<Entity> readDefFile(std::istream& stream)
 {
-    std::ifstream stream(fileName);
-    
-    if (!stream)
-    {
-        throw std::runtime_error("Could not open .def file for reading");
-    }
-    
     std::vector<Entity> toReturn;
     
+    bool inKeys = false;
+    bool shouldPush = false;
     size_t lineNum = 0;
     std::string line;
+    
+    Entity entity;
+    
     while(getline(stream, line))
     {
+        stripRight(line);
         lineNum++;
         
-        if (line.empty())
+        if (line.empty()) {
             continue;
+        }
         
         std::string::iterator it = line.begin();
         std::string::iterator begin = line.begin();
         std::string::iterator end = line.end();
+        std::string::iterator start = it;
         
-        if (*it == '/')
-        {
-            it++;
-            if (*it == '/')
-                continue; //skip comment
-            else if (*it == '*')
+        if (shouldPush) {
+            toReturn.push_back(entity);
+            entity = Entity();
+            inKeys = false;
+            shouldPush = false;
+        }
+        
+        if (inKeys) {
+            if (line.size() > 1)
             {
-                it++;
-                if (end - it > quakednum && std::equal(quakedstr, quakedstr+quakednum, it)) // /*QUAKED starts here
-                {
-                    Entity entity;
-                    advance(it, quakednum);
-                    it = skipSpaces(it, end);
-                    std::string::iterator start = it;
-                    it = skipAlpha(it, end);
-                    entity.name = std::string(start, it);
-                    
-                    it = skipSpaces(it, end);
-                    if (it != end)
-                    {
-                        if (*it == '(')
-                        {
-                            it++;
-                            for (int i=0; i<3; ++i)
-                            {
-                                it = skipSpaces(it, end);
-                                start = it;
-                                it = skipFloat(it, end);
-                                std::string numstr(start, it);
-                                entity.color[i] = colorFromFloat(strtod(numstr.c_str(), NULL));
-                            }
-                            
-                            while(*it != ')')
-                            {
-                                it++;
-                                if (it == end) {
-                                    throw DefReadError(unexpectedeof, lineNum, it-begin);
-                                }
-                            }
-                            it++;
-                            it = skipSpaces(it, end);
-                            if (it != end)
-                            {
-                                if (*it == '?')
-                                {
-                                    entity.solid = true;
-                                    it++;
-                                }
-                                else
-                                {
-                                    it = readBox(it, lineNum, begin, end, entity.box);
-                                    it = skipSpaces(it, end);
-                                    it = readBox(it, lineNum, begin, end, entity.box+3);
-                                }
-                                it = skipSpaces(it, end);
-                                readFlags(it, lineNum, begin, end, entity.spawnflags);
-                                
-                                while(getline(stream, line))
-                                {
-                                    if (line.empty())
-                                        continue;
-                                    
-                                    bool needbreak = false;
-                                    if (line.size() > 1)
-                                    {
-                                        if (line[0] == '*' && line[1] == '/')
-                                            break;
-                                        if (line[line.size()-2] == '*' && line[line.size()-1] == '/')
-                                        {
-                                            line.erase(line.end()-2, line.end());
-                                            needbreak = true;
-                                        }
-                                    }
-                                    
-                                    if (isalpha(line[0]) || line[0] == '_')
-                                    {
-                                        it = line.begin();
-                                        begin = line.begin();
-                                        end = line.end();
-                                        start = it;
-                                        it = skipAlpha(it, end);
-                                        
-                                        std::string keyname(start, it);
-                                        it = skipSpaces(it, end);
-                                        
-                                        if (keyname == "model" && *it == '=')
-                                        {
-                                            it++;
-                                            if (*it == '"')
-                                            {
-                                                it++;
-                                                start = it;
-                                                while(it != end && *it != '"')
-                                                    it++;
-                                                std::string modelname(start, it);
-                                                entity.model = modelname;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (it == end  || *it != ':')
-                                            {
-                                                start = it;
-                                                it = skipAlpha(it, end);
-                                                if (std::string(start, it) == "OR") //check if this is the field with two names
-                                                {
-                                                    it = skipSpaces(it, end);
-                                                    start = it;
-                                                    it = skipAlpha(it, end);
-                                                    keyname = std::string(start, it); //take the second name as a key name
-                                                    it = skipSpaces(it, end);
-                                                }
-                                                else //description
-                                                {
-                                                    if (entity.description.empty())
-                                                    {
-                                                        entity.description = withoutQuotes(line);
-                                                    }
-                                                    else
-                                                    {
-                                                        entity.description += "\\n\\n";
-                                                        entity.description += withoutQuotes(line);
-                                                    }
-                                                    it = end;
-                                                }
-                                            }
-                                            if (it != end && *it == ':')
-                                            {
-                                                it++;
-                                                it = skipSpaces(it, end);
-                                                start = it;
-                                                while(it != end)
-                                                    it++;
-                                                std::string description = withoutQuotes(std::string(start, it));
-                                                std::string* found = std::find(entity.spawnflags, entity.spawnflags+Entity::SpawnFlagNum, keyname);
-                                                
-                                                if (found != entity.spawnflags+Entity::SpawnFlagNum) //it's spawnflag
-                                                    entity.flagsdescriptions[found-entity.spawnflags] = description;
-                                                else //it's field
-                                                    entity.keys.push_back(Key(keyname, description));
-                                            }
-                                        }
-                                        
-                                        
-                                        
-                                    }
-                                    if (needbreak)
-                                        break;
-                                }
-                                
-                                toReturn.push_back(entity);
-                            }
-                            else
-                            {
-                                throw DefReadError(unexpectedeof, lineNum, it-begin);
-                            }
-                        }
+                if (line[0] == '*' && line[1] == '/') {
+                    shouldPush = true;
+                }
+                if (line[line.size()-2] == '*' && line[line.size()-1] == '/') {
+                    line.erase(line.end()-2, line.end());
+                    shouldPush = true;
+                }
+            }
+            
+            if (isalpha(line[0]) || line[0] == '_' || line[0] == '\"')
+            {   
+                if (it != end && *it == '\"') {
+                    it++;
+                }
+                
+                start = it;
+                
+                std::string keyname;
+                if (*begin == '\"') {
+                    while(it != end && *it != '\"') {
+                        it++;
                     }
-                    else
-                    {
-                        throw DefReadError(unexpectedeof, lineNum, it-begin);
+                    if (it == end) {
+                        throw DefReadError("Expected pair quote", lineNum, it-begin);
+                    } else {
+                        keyname = std::string(start, it);
+                        it++;
+                    }
+                    
+                } else {
+                    it = skipAlpha(it, end);
+                    keyname = std::string(start, it);
+                }
+                it = skipSpaces(it, end);
+                
+                if (keyname == "model" && *it == '=')
+                {
+                    it++;
+                    if (*it == '"') {
+                        it++;
+                        start = it;
+                        while(it != end && *it != '"') {
+                            it++;
+                        }
+                        std::string modelname(start, it);
+                        entity.model = modelname;
                     }
                 }
                 else
                 {
-                    throw DefReadError("Expected QUAKED", lineNum, it-begin);
+                    if ((it == end  || *it != ':') && *begin != '\"' )
+                    {
+                        start = it;
+                        it = skipAlpha(it, end);
+                        if (std::string(start, it) == "OR") //check if this is the field with two names
+                        {
+                            it = skipSpaces(it, end);
+                            start = it;
+                            it = skipAlpha(it, end);
+                            keyname = std::string(start, it); //take the second name as a key name
+                            it = skipSpaces(it, end);
+                        }
+                        else //description
+                        {
+                            if (entity.description.empty()) {
+                                entity.description = withoutQuotes(line);
+                            } else {
+                                entity.description += "\\n\\n";
+                                entity.description += withoutQuotes(line);
+                            }
+                            it = end;
+                        }
+                    }
+                    if (it != end && (*it == ':' || *begin == '\"'))
+                    {
+                        if (*it == ':') {
+                            it++;
+                        }
+                        
+                        it = skipSpaces(it, end);
+                        start = it;
+                        while(it != end)
+                            it++;
+                        std::string description = withoutQuotes(std::string(start, it));
+                        std::string* found = std::find(entity.spawnflags, entity.spawnflags+Entity::SpawnFlagNum, keyname);
+                        
+                        if (found != entity.spawnflags+Entity::SpawnFlagNum) //it's spawnflag
+                            entity.flagsdescriptions[found-entity.spawnflags] = description;
+                        else //it's field
+                            entity.keys.push_back(Key(keyname, description));
+                    }
+                }
+            } else if (line[0] == ' ') {
+                if (entity.description.empty()) {
+                    entity.description = withoutQuotes(line);
+                } else {
+                    entity.description += "\\n\\n";
+                    entity.description += withoutQuotes(line);
+                }
+            }
+        } else {
+            if (*it == '/')
+            {
+                it++;
+                if (*it == '/') {
+                    continue; //skip comment
+                } else if (*it == '*') {
+                    it++;
+                    if ( static_cast<size_t>(end - it) > quakednum && std::equal(quakedstr, quakedstr+quakednum, it)) // /*QUAKED starts here
+                    {
+                        advance(it, quakednum);
+                        it = skipSpaces(it, end);
+                        start = it;
+                        it = skipAlpha(it, end);
+                        entity.name = std::string(start, it);
+                        
+                        it = skipSpaces(it, end);
+                        if (it != end)
+                        {
+                            if (*it == '(')
+                            {
+                                it++;
+                                for (int i=0; i<3; ++i)
+                                {
+                                    it = skipSpaces(it, end);
+                                    start = it;
+                                    it = skipFloat(it, end);
+                                    std::string numstr(start, it);
+                                    entity.color[i] = colorFromFloat(strtod(numstr.c_str(), NULL));
+                                }
+                                
+                                while(*it != ')')
+                                {
+                                    it++;
+                                    if (it == end) {
+                                        throw DefReadError(unexpectedeof, lineNum, it-begin);
+                                    }
+                                }
+                                it++;
+                                it = skipSpaces(it, end);
+                                if (it != end)
+                                {
+                                    if (*it == '?') {
+                                        entity.solid = true;
+                                        it++;
+                                    } else {
+                                        it = readBox(it, lineNum, begin, end, entity.box);
+                                        it = skipSpaces(it, end);
+                                        it = readBox(it, lineNum, begin, end, entity.box+3);
+                                    }
+                                    it = skipSpaces(it, end);
+                                    readFlags(it, lineNum, begin, end, entity.spawnflags);
+                                    
+                                    inKeys = true;
+                                }
+                                else
+                                {
+                                    throw DefReadError(unexpectedeof, lineNum, it-begin);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw DefReadError(unexpectedeof, lineNum, it-begin);
+                        }
+                    }
+                    else
+                    {
+                        throw DefReadError("Expected QUAKED", lineNum, it-begin);
+                    }
                 }
             }
         }
     }
-    stream.close();
     return toReturn;
 }

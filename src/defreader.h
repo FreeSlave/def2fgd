@@ -4,6 +4,8 @@
 #define DEFREADER_H
 
 #include <stdexcept>
+#include <fstream>
+#include <vector>
 #include "entity.h"
 
 class DefReadError : public std::runtime_error
@@ -19,6 +21,6 @@ private:
     size_t _column;
 };
 
-std::vector<Entity> readDefFile(const char* fileName);
+std::vector<Entity> readDefFile(std::istream& stream);
 
 #endif

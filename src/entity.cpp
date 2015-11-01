@@ -38,6 +38,17 @@ Entity::Entity() : solid(false)
     color[2] = 200;
 }
 
+bool Entity::hasKey(const std::string& name) const
+{
+    for (size_t i=0; i<keys.size(); ++i)
+    {
+        if (keys[i].name == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
 std::ostream& operator<<(std::ostream& out, const Entity& entity)
 {
     out << entity.name << (entity.solid ? " solid" : " point");

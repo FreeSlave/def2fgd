@@ -25,9 +25,9 @@ Note that it does not remove executable. Run the following command to remove bot
 List of user options:
 
     BUILD_DIR       # build directory. Default is 'build'
-    CXX             # alternate compiler. Default is g++
+    CXX             # alternate compiler. Default is c++
     USER_FLAGS      # additional flags to compiler.
-    INSTALL_PATH    # change install path. Default is /usr/local/bin
+    PREFIX          # prefix for install path. Default is /usr/local
     PROGRAM         # name of executable file to compile. Default is def2fgd.
 
 Some useful examples showing usage of user options:

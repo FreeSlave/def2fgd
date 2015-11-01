@@ -1,11 +1,12 @@
-CXX=g++
+CXX=c++
 LINK=$(CXX)
-BUILD_DIR=build
-BIN_DIR=$(BUILD_DIR)/bin
+BIN_DIR=bin
 SRC_DIR=src
-OBJ_DIR=$(BUILD_DIR)/obj
+OBJ_DIR=build
 
-INSTALL_PATH=/usr/local/bin
+PREFIX=/usr/local
+INSTALL_BIN_DIR=$(PREFIX)/bin
+INSTALL_MAN1_DIR=$(PREFIX)/share/man/man1
 
 OBJS = \
 	$(OBJ_DIR)/main.o \
@@ -15,6 +16,7 @@ OBJS = \
 
 INCLUDE=-I$(SRC_DIR)/rapidxml-1.13
 PROGRAM=def2fgd
+MAN1=def2fgd.1
 TARGET=$(BIN_DIR)/$(PROGRAM)
 
 all: make_obj_dir make_bin_dir $(TARGET)
@@ -29,16 +31,19 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(INCLUDE) $(CFLAGS) $(USER_FLAGS) -o $@ -c $<
 
 $(TARGET): $(OBJS)
-	$(LINK) $(CFLAGS) $(USER_FLAGS) $(OBJS) -o $@
+	$(LINK) $(LDFLAGS) $(CFLAGS) $(USER_FLAGS) $(OBJS) -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)
 
 distclean: 
-	rm -rf $(BUILD_DIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 install:
-	cp $(TARGET) $(INSTALL_PATH)
+	install -d $(INSTALL_BIN_DIR) $(INSTALL_MAN1_DIR)
+	install $(TARGET) $(INSTALL_BIN_DIR)
+	install -m644 $(MAN1) $(INSTALL_MAN1_DIR)
 
 uninstall:
-	rm $(INSTALL_PATH)/$(PROGRAM)
+	rm $(INSTALL_BIN_DIR)/$(PROGRAM)
+	rm $(INSTALL_MAN1_DIR)/$(MAN1)

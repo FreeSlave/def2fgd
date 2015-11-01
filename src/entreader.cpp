@@ -22,17 +22,7 @@ namespace
         return strncmp(elem->name(), name, elem->name_size()) == 0;
     }
     
-    static bool hasValue(xml_base<>* elem, const char* value)
-    {
-        return strncmp(elem->value(), value, elem->value_size()) == 0;
-    }
-    
     static std::string valueString(xml_base<>* elem)
-    {
-        return std::string(elem->value(), elem->value_size());
-    }
-    
-    static std::string nameString(xml_base<>* elem)
     {
         return std::string(elem->value(), elem->value_size());
     }
@@ -83,18 +73,9 @@ namespace
     }
 }
 
-std::vector<Entity> readEntFile(const char* fileName)
-{
-    std::ifstream stream(fileName);
-    
-    if (!stream)
-    {
-        throw std::runtime_error("Could not open .ent file for reading");
-    }
-    
+std::vector<Entity> readEntFile(std::istream& stream)
+{   
     std::vector<char> input((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
-    stream.close();
-    
     std::vector<Entity> toReturn;
     
     xml_document<> doc;

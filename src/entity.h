@@ -33,6 +33,8 @@ struct Entity
     int box[6];
     bool solid;
     std::string model;
+    
+    bool hasKey(const std::string& name) const;
 };
 
 std::ostream& operator<<(std::ostream& out, const Entity& entity);
