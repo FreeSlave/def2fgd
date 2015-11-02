@@ -29,7 +29,7 @@ For default build just type **make** being in the root directory of repository (
 
     make
 
-**def2fgd** should be placed to build/bin directory.
+**def2fgd** should be placed to 'bin' directory.
 
 To remove generated object files type:
 
@@ -49,13 +49,13 @@ List of user options:
 
 Some useful examples showing usage of user options:
 
-    make OBJ_DIR=build-m32 USER_FLAGS=-m32    # force building of 32-bit binaries
-    make OBJ_DIR=build-m32 USER_FLAGS=-m32 clean # must be cleaned using the same options
-    make OBJ_DIR=build-m64 USER_FLAGS=-m64    # force building of 64-bit binaries
-    make OBJ_DIR=build-clang CXX=clang++      # use clang++ instead of g++
-    make OBJ_DIR=build-static USER_FLAGS=-static-libstdc++ # linking to libstdc++ statically
-    make OBJ_DIR=build-debug USER_FLAGS=-ggdb # build with debug symbols
-    make OBJ_DIR=build-mingw CXX=i586-mingw32msvc-g++ PROGRAM=def2fgd.exe # cross-compilation
+    make BIN_DIR=bin-m32 OBJ_DIR=build-m32 USER_FLAGS=-m32    # force building of 32-bit binaries
+    make BIN_DIR=bin-m32 OBJ_DIR=build-m32 USER_FLAGS=-m32 clean # must be cleaned using the same options
+    make BIN_DIR=bin-m64 OBJ_DIR=build-m64 USER_FLAGS=-m64    # force building of 64-bit binaries
+    make BIN_DIR=bin-clang OBJ_DIR=build-clang CXX=clang++      # use clang++ instead of g++
+    make BIN_DIR=bin-static OBJ_DIR=build-static USER_FLAGS=-static-libstdc++ # linking to libstdc++ statically
+    make BIN_DIR=bin-debug OBJ_DIR=build-debug USER_FLAGS=-ggdb # build with debug symbols
+    make BIN_DIR=bin-mingw OBJ_DIR=build-mingw CXX=i586-mingw32msvc-g++ PROGRAM=def2fgd.exe # cross-compilation
 
 ## Building on Windows using MinGW
 
