@@ -151,7 +151,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                 if (line[0] == '*' && line[1] == '/') {
                     shouldPush = true;
                 } else if (line[line.size()-2] == '*' && line[line.size()-1] == '/') {
-                    line = std::string(line.begin(), line.end()-2);
+                    line.resize(line.size()-2);
                     shouldPush = true;
                 }
             }

@@ -78,3 +78,11 @@ Then, being in root repository directory type these commands to terminal:
     debuild -uc -us
 
 Deb package should appear in **deb** directory
+
+## Cross-compilation
+
+Being on Debian GNU/Linux it's possible to build def2fgd for both GNU/Linux x86 and x86_64 as well as for MS Windows.
+
+    sudo apt-get install zip mingw32 gcc-multilib g++-multilib
+    mkdir archives
+    ./scripts/make_archives archives 1.0
