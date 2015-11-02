@@ -65,6 +65,12 @@ Use **mingw32-make** instead of 'make' everywhere. MinGW\bin must be in your **P
 
 Solution for Visual Studio 2010 is placed in **msvc** directory. Open def2fgd.sln, change configuration to Release, then Build -> Build Solution. def2fgd.exe should appear in build-msvc-release\bin.
 
+## Building on FreeBSD
+
+Same as on GNU/Linux, but use **gmake** instead of 'make' everywhere. Ensure gmake is installed:
+
+    pkg install gmake
+
 ## Building .deb package
 
 First install packages:
