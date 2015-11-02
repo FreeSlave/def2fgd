@@ -138,11 +138,6 @@ std::vector<Entity> readDefFile(std::istream& stream)
             continue;
         }
         
-        std::string::iterator it = line.begin();
-        std::string::iterator begin = line.begin();
-        std::string::iterator end = line.end();
-        std::string::iterator start = it;
-        
         if (shouldPush) {
             toReturn.push_back(entity);
             entity = Entity();
@@ -160,7 +155,15 @@ std::vector<Entity> readDefFile(std::istream& stream)
                     shouldPush = true;
                 }
             }
-            
+        }
+        
+        std::string::iterator it = line.begin();
+        std::string::iterator begin = line.begin();
+        std::string::iterator end = line.end();
+        std::string::iterator start = it;
+        
+        
+        if (inKeys) {
             if (isalpha(line[0]) || line[0] == '_' || line[0] == '\"')
             {   
                 if (it != end && *it == '\"') {
@@ -242,7 +245,9 @@ std::vector<Entity> readDefFile(std::istream& stream)
                             it++;
                         }
                         it = skipSpaces(it, end);
+                        
                         std::string description = withoutQuotes(std::string(it, end));
+                        
                         entity.keys.push_back(Key(keyname, description));
                     }
                 }
