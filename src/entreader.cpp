@@ -7,8 +7,7 @@
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
-#include <iostream>
-
+#include <sstream>
 
 #include "entreader.h"
 #include "rapidxml.hpp"
@@ -73,13 +72,43 @@ namespace
     }
 }
 
+std::string descriptionLines(const std::string& description)
+{
+    std::string toReturn;
+    std::istringstream stream(description);
+    
+    std::string line;
+    while(getline(stream, line))
+    {
+        bool sectionName = true;
+        if (line.size() > 8) {
+            for (size_t i=0; i<8; ++i) {
+                sectionName = sectionName && line[i] == '-';
+            }
+        }
+        
+        if (sectionName) { //probably something like -------- KEYS --------. Just skip.
+            continue;
+        }
+        
+        if (toReturn.empty()) {
+            toReturn = withoutQuotes(line);
+        } else {
+            toReturn += "\\n";
+            toReturn += withoutQuotes(line);
+        }
+    }
+    
+    return toReturn;
+}
+
 std::vector<Entity> readEntFile(std::istream& stream)
 {   
     std::vector<char> input((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
     std::vector<Entity> toReturn;
     
     xml_document<> doc;
-    doc.parse<parse_trim_whitespace|parse_normalize_whitespace>(&input[0]);
+    doc.parse<parse_trim_whitespace>(&input[0]);
     
     xml_node<>* classes = doc.first_node("classes");
     if (!classes)
@@ -89,7 +118,7 @@ std::vector<Entity> readEntFile(std::istream& stream)
     {
         Entity entity;
         
-        entity.description = withoutQuotes(std::string(entityNode->value(), entityNode->value_size()));
+        entity.description = descriptionLines(std::string(entityNode->value(), entityNode->value_size()));
         
         if (hasName(entityNode, "point"))
             entity.solid = false;
@@ -144,26 +173,34 @@ std::vector<Entity> readEntFile(std::istream& stream)
                     ));
                 }
             }
-            
-            
-            xml_node<>* lastNode = entityNode->last_node();
-            if (lastNode && entity.model.empty())
+        }
+        
+        xml_node<>* lastNode = entityNode->last_node();
+        if (lastNode && lastNode->name_size() == 0)
+        {
+            std::string val = valueString(lastNode);
+            size_t pos = val.find("modeldisabled=");
+            if (pos != std::string::npos && entity.model.empty())
             {
-                std::string val = valueString(lastNode);
-                size_t pos = val.find("modeldisabled=");
-                if (pos != std::string::npos)
+                std::string::iterator it = val.begin() + pos + strlen("modeldisabled=");
+                if (*it == '"')
                 {
-                    std::string::iterator it = val.begin() + pos + strlen("modeldisabled=");
-                    if (*it == '"')
-                    {
+                    it++;
+                    std::string::iterator start = it;
+                    while(it != val.end() && *it != '"')
                         it++;
-                        std::string::iterator start = it;
-                        while(it != val.end() && *it != '"')
-                            it++;
-                        std::string modelname(start, it);
-                        entity.model = modelname;
-                    }
+                    std::string modelname(start, it);
+                    entity.model = modelname;
                 }
+            }
+            if (pos != std::string::npos) {
+                val.resize(pos);
+            }
+            if (val.size()) {
+                if (entity.description.size()) {
+                    entity.description += "\\n";
+                }
+                entity.description += descriptionLines(val);
             }
         }
         
