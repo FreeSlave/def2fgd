@@ -3,12 +3,14 @@
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
-CFLAGS = $(shell dpkg-buildflags --get CFLAGS) -Wall
-LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
+CXXFLAGS:=$(shell dpkg-buildflags --get CXXFLAGS) -Wall
+LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS)
+
+DESTDIR?=$$(pwd)/debian/def2fgd
 
 build:
 	dh_testdir
-	$(MAKE) CFLAGS="$(CFLAGS)"
+	$(MAKE) 
 build-indep: build
 build-arch: build
 clean:
@@ -20,7 +22,7 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_installdirs
-	$(MAKE) PREFIX=debian/def2fgd/usr install
+	$(MAKE) DESTDIR="$(DESTDIR)" prefix=/usr install
 binary-arch: build install
 	dh_testdir
 	dh_testroot

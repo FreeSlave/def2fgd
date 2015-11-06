@@ -1,12 +1,12 @@
-CXX=c++
+CXX?=c++
 LINK=$(CXX)
 BIN_DIR=bin
 SRC_DIR=src
 OBJ_DIR=build
 
-PREFIX=/usr/local
-INSTALL_BIN_DIR=$(PREFIX)/bin
-INSTALL_MAN1_DIR=$(PREFIX)/share/man/man1
+prefix=/usr/local
+INSTALL_BIN_DIR=$(DESTDIR)$(prefix)/bin
+INSTALL_MAN1_DIR=$(DESTDIR)$(prefix)/share/man/man1
 
 OBJS = \
 	$(OBJ_DIR)/main.o \
@@ -28,10 +28,10 @@ make_bin_dir:
 	-mkdir -p $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(INCLUDE) $(CFLAGS) $(USER_FLAGS) -o $@ -c $<
+	$(CXX) $(INCLUDE) $(CXXFLAGS) $(USER_FLAGS) -o $@ -c $<
 
 $(TARGET): $(OBJS)
-	$(LINK) $(LDFLAGS) $(CFLAGS) $(USER_FLAGS) $(OBJS) -o $@
+	$(LINK) $(LDFLAGS) $(CXXFLAGS) $(USER_FLAGS) $(OBJS) -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)
