@@ -21,3 +21,4 @@ archives
 *.changes
 defs
 ents
+*.mo

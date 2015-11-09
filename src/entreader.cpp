@@ -11,6 +11,7 @@
 
 #include "entreader.h"
 #include "rapidxml.hpp"
+#include "translate.h"
 
 using namespace rapidxml;
 
@@ -112,7 +113,7 @@ std::vector<Entity> readEntFile(std::istream& stream)
     
     xml_node<>* classes = doc.first_node("classes");
     if (!classes)
-        throw std::runtime_error("No 'classes' entry found");
+        throw std::runtime_error(translate("No 'classes' entry found"));
     
     for (xml_node<>* entityNode = classes->first_node(); entityNode; entityNode = entityNode->next_sibling())
     {

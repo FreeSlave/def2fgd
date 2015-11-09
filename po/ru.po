@@ -1,0 +1,95 @@
+# Russian translations for def2fgd package
+# Английские переводы для пакета def2fgd.
+# Copyright (C) 2015 Roman Chistokhodov
+# This file is distributed under the same license as the def2fgd package.
+# Roman Chistokhodov <freeslave93@gmail.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: def2fgd\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-10 01:27+0300\n"
+"PO-Revision-Date: 2015-11-10 01:47+0300\n"
+"Last-Translator: Roman Chistokhodov <freeslave93@gmail.com>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: src/main.cpp:223
+msgid "-format option repetition\n"
+msgstr "Повторение опции -format\n"
+
+#: src/main.cpp:231
+msgid "-format option expects argument\n"
+msgstr "Опция -format ожидает аргумент\n"
+
+#: src/main.cpp:270
+msgid ""
+"Could not detect input format. Use -format option to explicitly set it.\n"
+msgstr ""
+"Не удалось определить формат входных данных. Используйте опцию -format, "
+"чтобы явно задать формат.\n"
+
+#: src/main.cpp:274
+#, c-format
+msgid ""
+"No input file nor format given.\n"
+"Use %s -help to get help.\n"
+msgstr ""
+"Не заданы ни входной файл, ни формат.\n"
+"Используйте %s -help, чтобы получить помощь.\n"
+
+#: src/main.cpp:288
+#, c-format
+msgid "Could not open file %s for reading: %s\n"
+msgstr "Не удалось открыть файл %s для чтения: %s\n"
+
+#: src/main.cpp:302
+#, c-format
+msgid "Unknown format '%s'\n"
+msgstr "Неизвестный формат '%s'\n"
+
+#: src/main.cpp:309
+#, c-format
+msgid "Could not open file %s for writing: %s\n"
+msgstr "Не удалось открыть файл %s для записи: %s\n"
+
+#: src/main.cpp:321
+#, c-format
+msgid "%s:%d:%d: error: %s\n"
+msgstr "%s:%d:%d ошибка: %s\n"
+
+#: src/main.cpp:323
+#, c-format
+msgid "%d:%d: error: %s\n"
+msgstr "%d:%d: ошибка: %s\n"
+
+#: src/main.cpp:330
+#, c-format
+msgid "Error: %s\n"
+msgstr "Ошибка: %s\n"
+
+#: src/defreader.cpp:17
+msgid "Unexpected end of line"
+msgstr ""
+
+#: src/defreader.cpp:75
+msgid "Unexpected symbol"
+msgstr ""
+
+#: src/defreader.cpp:184
+msgid "Expected pair quote"
+msgstr ""
+
+#: src/defreader.cpp:333
+msgid "Expected QUAKED"
+msgstr ""
+
+#: src/entreader.cpp:116
+msgid "No 'classes' entry found"
+msgstr ""

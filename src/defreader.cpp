@@ -7,12 +7,15 @@
 
 #include <stdexcept>
 #include "defreader.h"
+#include "translate.h"
 
 namespace
 {
     const char* const quakedstr = "QUAKED";
     size_t quakednum = 6;
-    const char* const unexpectedeof = "Unexpected end of line";
+    std::string unexpectedEndOfFile() { 
+        return translate("Unexpected end of line"); 
+    };
     
     static std::string::iterator skipSpaces(std::string::iterator current, const std::string::iterator& end)
     {
@@ -51,15 +54,15 @@ namespace
             {
                 it = skipSpaces(it, end);
                 if (it == end)
-                    throw DefReadError(unexpectedeof, lineNum, it-begin);
+                    throw DefReadError(unexpectedEndOfFile(), lineNum, it-begin);
                 std::string::iterator start = it;
                 if (*it == '-')
                     it++;
                 if (it == end)
-                    throw DefReadError(unexpectedeof, lineNum, it-begin);
+                    throw DefReadError(unexpectedEndOfFile(), lineNum, it-begin);
                 it = skipDigits(it, end);
                 if (it == end)
-                    throw DefReadError(unexpectedeof, lineNum, it-begin);
+                    throw DefReadError(unexpectedEndOfFile(), lineNum, it-begin);
                 std::string numstr(start, it);
                 size[i] = static_cast<int>(strtol(numstr.c_str(), NULL, 10));
             }
@@ -69,7 +72,7 @@ namespace
                 return it;
             }
         }
-        throw DefReadError("Unexpected symbol", lineNum, it-begin);
+        throw DefReadError(translate("Unexpected symbol"), lineNum, it-begin);
     }
 
     static std::string::iterator readFlags(std::string::iterator it, size_t lineNum, const std::string::iterator& begin, const std::string::iterator& end, std::string* flags)
@@ -178,7 +181,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                         it++;
                     }
                     if (it == end) {
-                        throw DefReadError("Expected pair quote", lineNum, it-begin);
+                        throw DefReadError(translate("Expected pair quote"), lineNum, it-begin);
                     } else {
                         keyname = std::string(start, it);
                         it++;
@@ -294,7 +297,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                 {
                                     it++;
                                     if (it == end) {
-                                        throw DefReadError(unexpectedeof, lineNum, it-begin);
+                                        throw DefReadError(unexpectedEndOfFile(), lineNum, it-begin);
                                     }
                                 }
                                 it++;
@@ -316,18 +319,18 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                 }
                                 else
                                 {
-                                    throw DefReadError(unexpectedeof, lineNum, it-begin);
+                                    throw DefReadError(unexpectedEndOfFile(), lineNum, it-begin);
                                 }
                             }
                         }
                         else
                         {
-                            throw DefReadError(unexpectedeof, lineNum, it-begin);
+                            throw DefReadError(unexpectedEndOfFile(), lineNum, it-begin);
                         }
                     }
                     else
                     {
-                        throw DefReadError("Expected QUAKED", lineNum, it-begin);
+                        throw DefReadError(translate("Expected QUAKED"), lineNum, it-begin);
                     }
                 }
             }

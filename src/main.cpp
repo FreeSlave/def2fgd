@@ -12,6 +12,7 @@
 
 #include "defreader.h"
 #include "entreader.h"
+#include "translate.h"
 
 #ifndef DEF2FGD_VERSION
 #define DEF2FGD_VERSION "unknown (was built without version)"
@@ -197,6 +198,10 @@ void printVersion()
     printf("def2fgd %s\n", DEF2FGD_VERSION);
 }
 
+#ifndef LOCALEDIR
+#define LOCALEDIR "locale"
+#endif
+
 int main(int argc, char** argv)
 {
     const char* format = "";
@@ -204,13 +209,18 @@ int main(int argc, char** argv)
     const char* outputFileName = 0;
     FGDWriteOptions options;
     
+    const char* package = "def2fgd";
+    const char* localeDir = LOCALEDIR;
+    
+    generateLocale(package, localeDir);
+    
     std::vector<const char*> positionalArgs;
     const char* programName = argv[0];
     for(int i=1; i<argc; ++i) {
         const char* arg = argv[i];
         if (strcmp(arg, "-format") == 0) {
             if (format[0]) {
-                fprintf(stderr, "format option repetition\n");
+                fprintf(stderr, translate("-format option repetition\n").c_str());
                 return EXIT_FAILURE;
             }
             
@@ -218,7 +228,7 @@ int main(int argc, char** argv)
             if (i < argc) {
                 format = argv[i];
             } else {
-                fprintf(stderr, "-format option expects argument\n");
+                fprintf(stderr, translate("-format option expects argument\n").c_str());
                 return EXIT_FAILURE;
             }
         } else if (strcmp(arg, "-bob") == 0) {
@@ -245,19 +255,23 @@ int main(int argc, char** argv)
         }
     }
     
+    if (inputFileName && strcmp(inputFileName, "-") == 0) {
+        inputFileName = 0;
+    }
+    
     if (format[0] == '\0') {
-        if (inputFileName && strcmp(inputFileName, "-") != 0) {
+        if (inputFileName) {
             const char* extension = strrchr(inputFileName, '.');
             if (extension && strcmp(extension, ".ent") == 0){
                 format = "ent";
             } else if (extension && strcmp(extension, ".def") == 0) {
                 format = "def";
             } else {
-                fprintf(stderr, "Could not detect input format. Use -format option to explicitly set it.\n");
+                fprintf(stderr, translate("Could not detect input format. Use -format option to explicitly set it.\n").c_str());
                 return EXIT_FAILURE;
             }
         } else {
-            fprintf(stderr, "No input file nor format given.\nUse %s -help\n", argv[0]);
+            fprintf(stderr, translate("No input file nor format given.\nUse %s -help to get help.\n").c_str(), argv[0]);
             return EXIT_FAILURE;
         }
     }
@@ -268,10 +282,10 @@ int main(int argc, char** argv)
     std::ifstream inFile;
     std::ofstream outFile;
     
-    if (inputFileName && strcmp(inputFileName, "-") != 0) {
+    if (inputFileName != 0) {
         inFile.open(inputFileName);
         if (!inFile) {
-            fprintf(stderr, "Could not open %s for reading: %s\n", inputFileName, strerror(errno));
+            fprintf(stderr, translate("Could not open file %s for reading: %s\n").c_str(), inputFileName, strerror(errno));
             return EXIT_FAILURE;
         }
         inStream = &inFile;
@@ -285,14 +299,14 @@ int main(int argc, char** argv)
         } else if (strcmp(format, "ent") == 0) {
             entities = readEntFile(*inStream);
         } else {
-            fprintf(stderr, "Unknown format %s\n", format);
+            fprintf(stderr, translate("Unknown format '%s'\n").c_str(), format);
             return EXIT_FAILURE;
         }
         
         if (outputFileName) {
             outFile.open(outputFileName);
             if (!outFile) {
-                fprintf(stderr, "Could not open %s for writing: %s\n", outputFileName, strerror(errno));
+                fprintf(stderr, translate("Could not open file %s for writing: %s\n").c_str(), outputFileName, strerror(errno));
                 return EXIT_FAILURE;
             }
             outStream = &outFile;
@@ -303,12 +317,17 @@ int main(int argc, char** argv)
     }
     catch(DefReadError& e)
     {
-        std::cerr << inputFileName << ":" << e.line() << ":" << e.column() << " " << e.what() << std::endl;
+        if (inputFileName) {
+            fprintf(stderr, translate("%s:%d:%d: error: %s\n").c_str(), inputFileName, e.line(), e.column(), e.what());
+        } else {
+            fprintf(stderr, translate("%d:%d: error: %s\n").c_str(), e.line(), e.column(), e.what());
+        }
+        
         return EXIT_FAILURE;
     }
     catch(std::exception& e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
+        fprintf(stderr, translate("Error: %s\n").c_str(), e.what());
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
