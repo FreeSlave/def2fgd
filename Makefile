@@ -19,6 +19,8 @@ PROGRAM=def2fgd
 MAN1=def2fgd.1
 TARGET=$(BIN_DIR)/$(PROGRAM)
 
+DEF2FGD_VERSION:=$(shell cat version)
+
 all: make_obj_dir make_bin_dir $(TARGET)
 
 make_obj_dir:
@@ -28,7 +30,7 @@ make_bin_dir:
 	-mkdir -p $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(INCLUDE) $(CXXFLAGS) $(USER_FLAGS) -o $@ -c $<
+	$(CXX) $(INCLUDE) $(CXXFLAGS) $(USER_FLAGS) -DDEF2FGD_VERSION=\"$(DEF2FGD_VERSION)\" -o $@ -c $<
 
 $(TARGET): $(OBJS)
 	$(LINK) $(LDFLAGS) $(CXXFLAGS) $(USER_FLAGS) $(OBJS) -o $@

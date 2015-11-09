@@ -13,7 +13,9 @@
 #include "defreader.h"
 #include "entreader.h"
 
-#define DEF2FGD_VERSION "1.0"
+#ifndef DEF2FGD_VERSION
+#define DEF2FGD_VERSION "unknown (was built without version)"
+#endif
 
 static bool startsWith(const std::string& name, const char* start)
 {

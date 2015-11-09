@@ -13,12 +13,7 @@ fi
 FROM=$CUR/..
 TO=$(readlink -f -- "$1")
 
-VERSION=$2
-
-if [ -z $VERSION ]; then
-    echo "Error: version expected as the second argument"
-    exit 1
-fi
+VERSION=$(cat $FROM/version)
 
 CXXFLAGS="-O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall"
 
@@ -40,4 +35,4 @@ WIN32_BIN=bin/bin-mingw
 make OBJ_DIR=build/build-mingw BIN_DIR=$WIN32_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m32 -static" CXX=i586-mingw32msvc-g++ PROGRAM=def2fgd.exe
 WIN32=$WIN32_BIN/def2fgd.exe
 i586-mingw32msvc-strip $WIN32
-$ZIP $TO/$NAME-win-x86.zip $WIN32
+$ZIP $TO/$NAME-windows-x86.zip $WIN32
