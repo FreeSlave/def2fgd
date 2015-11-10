@@ -8,7 +8,10 @@ MO_DIR=locale
 
 prefix=/usr/local
 INSTALL_BIN_DIR=$(DESTDIR)$(prefix)/bin
-INSTALL_MAN1_DIR=$(DESTDIR)$(prefix)/share/man/man1
+INSTALL_SHARE_DIR=$(DESTDIR)$(prefix)/share
+INSTALL_MAN_DIR=$(INSTALL_SHARE_DIR)/man
+INSTALL_MAN1_DIR=$(INSTALL_MAN_DIR)/man1
+INSTALL_LOCALE_DIR=$(INSTALL_SHARE_DIR)/locale
 
 OBJS = \
 	$(OBJ_DIR)/main.o \
@@ -26,14 +29,20 @@ ifeq ($(USE_LOCALE),gettext)
 LOCALE_FLAGS=-DUSE_GETTEXT
 else
 ifeq ($(USE_LOCALE),boost)
-LOCALE_FLAGS=-DUSE_BOOST_LOCALE -lboost_locale -licuuc
+LOCALE_FLAGS=-DUSE_BOOST_LOCALE
+LDFLAGS+=-lboost_locale -licuuc
 endif
 endif
 
 ifeq ($(LOCALEDIR),)
 
 else
-LOCALEDIR=-DLOCALEDIR=$(LOCALEDIR)
+
+ifeq ($(LOCALEDIR),default)
+LOCALE_FLAGS+=-DLOCALEDIR=\"$(INSTALL_LOCALE_DIR)\"
+else
+LOCALE_FLAGS+=-DLOCALEDIR=\"$(LOCALEDIR)\"
+endif
 endif
 
 DEF2FGD_VERSION:=$(shell cat version)
@@ -48,7 +57,7 @@ make_bin_dir:
 	-mkdir -p $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(INCLUDE) -DDEF2FGD_VERSION=\"$(DEF2FGD_VERSION)\" -o $@ -c $< $(CXXFLAGS) $(USER_FLAGS) $(LOCALE_FLAGS) $(LOCALEDIR)
+	$(CXX) $(INCLUDE) -DDEF2FGD_VERSION=\"$(DEF2FGD_VERSION)\" -o $@ -c $< $(CXXFLAGS) $(USER_FLAGS) $(LOCALE_FLAGS)
 
 $(TARGET): $(OBJS)
 	$(LINK) $^ -o $@ $(LOCALE_FLAGS) $(LDFLAGS) $(CXXFLAGS) $(USER_FLAGS)
@@ -82,3 +91,13 @@ $(MO_DIR)/ru/LC_MESSAGES/def2fgd.mo: $(PO_DIR)/ru.po
 
 translations: $(MO_DIR)/ru/LC_MESSAGES/def2fgd.mo
 
+clean-translations:
+	rm -rf $(MO_DIR)
+
+install-tranlations:
+	install -d $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
+	install -m644 $(MO_DIR)/ru/LC_MESSAGES/def2fgd.mo $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
+	
+uninstall-translations:
+	rm $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES/def2fgd.mo
+	-rm -fd $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES

@@ -10,19 +10,22 @@ DESTDIR?=$$(pwd)/debian/def2fgd
 
 build:
 	dh_testdir
-	$(MAKE) 
+	$(MAKE) LOCALEDIR=/usr/share/locale USE_LOCALE=gettext
+	$(MAKE) translations
 build-indep: build
 build-arch: build
 clean:
 	dh_testdir
 	dh_testroot
 	$(MAKE) distclean
+	$(MAKE) clean-translations
 	dh_clean
 install: build
 	dh_testdir
 	dh_testroot
 	dh_installdirs
 	$(MAKE) DESTDIR="$(DESTDIR)" prefix=/usr install
+	$(MAKE) DESTDIR="$(DESTDIR)" prefix=/usr install-tranlations
 binary-arch: build install
 	dh_testdir
 	dh_testroot

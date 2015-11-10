@@ -220,7 +220,7 @@ int main(int argc, char** argv)
         const char* arg = argv[i];
         if (strcmp(arg, "-format") == 0) {
             if (format[0]) {
-                fprintf(stderr, translate("-format option repetition\n").c_str());
+                fputs(translate("-format option repetition\n").c_str(), stderr);
                 return EXIT_FAILURE;
             }
             
@@ -228,7 +228,7 @@ int main(int argc, char** argv)
             if (i < argc) {
                 format = argv[i];
             } else {
-                fprintf(stderr, translate("-format option expects argument\n").c_str());
+                fputs(translate("-format option expects argument\n").c_str(), stderr);
                 return EXIT_FAILURE;
             }
         } else if (strcmp(arg, "-bob") == 0) {
@@ -267,7 +267,7 @@ int main(int argc, char** argv)
             } else if (extension && strcmp(extension, ".def") == 0) {
                 format = "def";
             } else {
-                fprintf(stderr, translate("Could not detect input format. Use -format option to explicitly set it.\n").c_str());
+                fputs(translate("Could not detect input format. Use -format option to explicitly set it.\n").c_str(), stderr);
                 return EXIT_FAILURE;
             }
         } else {

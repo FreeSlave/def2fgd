@@ -7,7 +7,7 @@ VERSION=$(cat $CUR/../version)
 
 cd $CUR/../..
 
-FILES="$FROM/Makefile $FROM/src/* $FROM/*.1"
+FILES="$FROM/Makefile $FROM/src/* $FROM/*.1 $FROM/po/*.po $FROM/po/*.pot $FROM/version"
 
 ARCHIVE=$FROM/deb/def2fgd_$VERSION.orig.tar.gz
 
