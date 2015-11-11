@@ -8,47 +8,49 @@ def2fgd \- convert .def and .ent to .fgd
 .I [OUTPUT-FILE]
 .SH DESCRIPTION
 .B def2fgd
-converts GtkRadiant and NetRadiant .def 
-and .ent files to Jackhammer .fgd.
+converts .def and .ent files used by 
+GtkRadiant and NetRadiant to .fgd
+files used by Jackhammer level editor.
 .SH OPTIONS
 .TP
 \fB\-format format\fP
-Specify format of input. Valid values are def and ent. 
+Specify format of input. Valid values are def and ent.
 By default format is detected from input file extension.
 
 .TP
 \fB\-offset-glob pattern\fP
 Add an extra pattern for matching entity names that needs offset.
-
+To add several patterns use this option multiple times.
+.br
 Offset will be used in level editor when creating point entities in 3D view.
-
+.br
 Default patterns are weapon_*, item_*, ammo_*, info_player_deathmatch and info_player_start.
 
 .TP
 \fB-noauto-offset-glob\fP
-Don't use default patterns when setting offset, only explicitly added ones.
+Discard default patterns when setting offset, use only explicitly added ones.
 
 .TP
 \fB-bobparms "x y z"\fP
 Set bob parameters for all bobbing entitites. Note that all three parameters should be passed as single argument, i.e. in pair quotes.
-
+.br
 If you don't know what bob parameters mean, but still want specific models (like weapons and items) to float and rotate, use just -bob.
 
 .TP
 \fB\-bob\fP
-Same as -bobparms "180 8 0". 
-
-This is good default since it makes models to float and rotate in 3D view of level editor the same way as they do in Quake III Arena and similar games.
+Same as -bobparms "180 8 0".
+This is good default since it makes item models to float and rotate in 3D view of level editor the same way as they do in Quake III Arena and similar games.
 
 .TP
 \fB\-bob-glob pattern\fP
 Add an extra pattern for matching entity names that needs bobbing parameters.
-
+To add several patterns use this option multiple times.
+.br
 Default patterns are weapon_*, item_* and ammo_*.
 
 .TP
 \fB-noauto-bob-glob\fP
-Don't use default patterns when setting bob parameters, only explicitly added ones.
+Discard default patterns when setting bob parameters, use only explicitly added ones.
 
 .TP
 \fB\-help\fP
@@ -68,11 +70,34 @@ When no OUTPUT-FILE given or OUTPUT-FILE is -, standard output is used.
 
 .SH EXAMPLES
 
+.TP
 def2fgd entities.def entities.fgd
+Parse entitites.def and write result to entities.fgd.
 
+.TP
 def2fgd -format def - entities.fgd < entities.def
+Parse from standard input and write result to entities.fgd.
+When reading from standard input the format must be given explicitly.
 
+.TP
 def2fgd entities.def > entities.fgd
+Parse entities.def and write result to standard output.
+
+.TP
+def2fgd -bob entities.def entities.fgd
+Add default bobbing parameters for weapons, items and ammo entities.
+
+.TP
+def2fgd -bobparms "100 0 0" entities.def entities.fgd
+Set bobbing parameters for weapons, items and ammo entities.
+
+.TP
+def2fgd -noauto-offset-glob -offset-glob item_* -offset-glob weapon_* entities.def entities.fgd
+Add offset only to entities which names are started with item_ or weapon_.
+
+.TP
+def2fgd -bob -bob-glob key_* -offset-glob key_* entities.def entities.fgd
+Besides default patterns add offset and bobbing parameters to entities which names are started with key_ as well.
 
 .SH AUTHOR
 Roman Chistokhodov https://bitbucket.org/FreeSlave/
