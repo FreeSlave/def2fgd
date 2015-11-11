@@ -18,6 +18,42 @@
 #define DEF2FGD_VERSION "unknown (was built without version)"
 #endif
 
+static bool globMatch(const char *str, const char *wild) {
+    const char *tail = 0;
+    const char* afterStar = 0;
+
+    while (*str != '\0' && *wild != '*') {
+        if (*wild == *str || *wild == '?') {
+            wild++;
+            str++;
+        } else {
+            return false;
+        }
+    }
+
+    while (*str != '\0') {
+        if (*wild == '*') {
+            ++wild;
+            if (*wild == '\0') {
+                return true;
+            }
+            afterStar = wild;
+            tail = str+1;
+        } else if (*wild == *str || *wild == '?') {
+            wild++;
+            str++;
+        } else {
+            wild = afterStar;
+            str = tail++;
+        }
+    }
+
+    while (*wild == '*') {
+        wild++;
+    }
+    return *wild == '\0';
+}
+
 static bool startsWith(const std::string& name, const char* start)
 {
     return name.compare(0, strlen(start), start) == 0;
@@ -36,12 +72,19 @@ static bool needsBob(const std::string& name)
 struct FGDWriteOptions
 {
     FGDWriteOptions();
+    int bobparms[3];
     bool bob;
+    
+    bool useDefaultBobPatterns;
+    bool useDefaultOffsetPatterns;
+    
+    std::vector<const char*> offsetPatterns;
+    std::vector<const char*> bobPatterns;
 };
 
-FGDWriteOptions::FGDWriteOptions() : bob(false)
+FGDWriteOptions::FGDWriteOptions() : bob(false), useDefaultBobPatterns(true), useDefaultOffsetPatterns(true)
 {
-    
+    bobparms[0] = bobparms[1] = bobparms[2] = 0;
 }
 
 void writefgd(std::ostream& stream, const std::vector<Entity>& entities, const FGDWriteOptions& options)
@@ -63,7 +106,15 @@ void writefgd(std::ostream& stream, const std::vector<Entity>& entities, const F
             stream << entity.box[4] << ' ';
             stream << entity.box[5] << ')';
             
-            if (needsOffset(entity.name)) {
+            bool addOffset = options.useDefaultOffsetPatterns && needsOffset(entity.name);
+            
+            if (!addOffset) {
+                for (size_t j=0; j<options.offsetPatterns.size() && !addOffset; ++j) {
+                    addOffset = globMatch(entity.name.c_str(), options.offsetPatterns[j]);
+                }
+            }
+            
+            if (addOffset) {
                 stream << " offset(0 0 " << abs(entity.box[2]) << ")";
             }
             
@@ -77,8 +128,18 @@ void writefgd(std::ostream& stream, const std::vector<Entity>& entities, const F
             } else {
                 stream << " color(" << entity.color[0] << ' ' << entity.color[1] << ' ' << entity.color[2] << ") ";
                 
-                if (options.bob && needsBob(entity.name)) {
-                    stream << "bobparms( 180 8 0 ) ";
+                if (options.bob) {
+                    bool addBob = options.useDefaultBobPatterns && needsBob(entity.name);
+                    
+                    if (!addBob) {
+                        for (size_t k=0; k<options.bobPatterns.size() && !addBob; ++k) {
+                            addBob = globMatch(entity.name.c_str(), options.bobPatterns[k]);
+                        }
+                    }
+                    
+                    if (addBob) {
+                        stream << "bobparms( " << options.bobparms[0] << " " << options.bobparms[1] << " " << options.bobparms[2] << " ) ";
+                    }
                 }
                 
                 for (std::vector<Key>::const_iterator it = entity.keys.begin(); it != entity.keys.end(); ++it)
@@ -182,20 +243,41 @@ void printHelp(const char* programName)
 {
     printf( "Usage: %s [OPTIONS...] [INPUT-FILE] [OUTPUT-FILE]\n"
             "\n"
-            "  -format format     specify format of input: def or ent\n"
-            "  -bob               automatically add bobparms for weapons, items and ammo\n"
-            "  -help              display this help and exit\n"
-            "  -version           show version information and exit\n"
-            "  -- [arguments...]  treat the rest of arguments as positional arguments\n"
+            "  -format format       specify format of input: def or ent\n"
+            "\n"
+            "  -offset-glob pattern add offset to entities matching given pattern;\n"
+            "                       this option can be passed multiple times\n"
+            "  -noauto-offset-glob  don't use default patterns when setting offset;\n"
+            "\n"
+            "  -bob                 same as -bobparms \"180 8 0\"\n"
+            "  -bobparms \"x y z\"    set bob parameters\n"
+            "  -bob-glob pattern    add bobparms to entities matching given pattern;\n"
+            "                       this option can be passed multiple times\n"
+            "  -noauto-bob-glob     don't use default patterns when setting bobparms\n"
+            "\n"
+            "  -help                display this help and exit\n"
+            "  -version             show version information and exit\n"
+            "  -- [arguments...]    treat the rest of arguments as positional arguments\n"
             "\n"
             "With no INPUT-FILE or when INPUT-FILE is -, read standard input.\n"
-            "With no OUTPUT-FILE, write to standard output.\n"
+            "With no OUTPUT-FILE or when OUTPUT-FILe is -, write to standard output.\n"
     , programName);
 }
 
 void printVersion()
 {
     printf("def2fgd %s\n", DEF2FGD_VERSION);
+}
+
+void printHint(const char* program)
+{
+    fprintf(stderr, translate("Use %s -help to get help.\n").c_str(), program);
+}
+
+void printBobparms(const FGDWriteOptions& options)
+{
+    fprintf(stderr, translate("Bob parameters already set to ( %d %d %d ). Remove redundant argument\n").c_str(), 
+            options.bobparms[0], options.bobparms[1], options.bobparms[2]);
 }
 
 #ifndef LOCALEDIR
@@ -228,11 +310,57 @@ int main(int argc, char** argv)
             if (i < argc) {
                 format = argv[i];
             } else {
-                fputs(translate("-format option expects argument\n").c_str(), stderr);
+                fputs(translate("-format requires argument\n").c_str(), stderr);
                 return EXIT_FAILURE;
             }
         } else if (strcmp(arg, "-bob") == 0) {
+            if (options.bob) {
+                printBobparms(options);
+                return EXIT_FAILURE;
+            }
+            
+            options.bobparms[0] = 180;
+            options.bobparms[1] = 80;
+            options.bobparms[2] = 0;
             options.bob = true;
+        } else if (strcmp(arg, "-bobparms") == 0) {
+            if (options.bob) {
+                printBobparms(options);
+                return EXIT_FAILURE;
+            }
+            
+            i++;
+            if (i < argc) {
+                char* current = argv[i];
+                options.bobparms[0] = static_cast<int>(strtol(current, &current, 10));
+                options.bobparms[1] = static_cast<int>(strtol(current, &current, 10));
+                options.bobparms[2] = static_cast<int>(strtol(current, NULL, 10));
+                options.bob = true;
+            } else {
+                fputs(translate("-bobparms requires argument\n").c_str(), stderr);
+                return EXIT_FAILURE;
+            }
+        } else if (strcmp(arg, "-offset-glob") == 0) {
+            i++;
+            if (i < argc) {
+                options.offsetPatterns.push_back(argv[i]);
+            } else {
+                fputs(translate("-offset-glob requires argument\n").c_str(), stderr);
+                return EXIT_FAILURE;
+            }
+        } else if (strcmp(arg, "-bob-glob") == 0) {
+            i++;
+            if (i < argc) {
+                options.bobPatterns.push_back(argv[i]);
+            } else {
+                fputs(translate("-bob-glob requires argument\n").c_str(), stderr);
+                return EXIT_FAILURE;
+            }
+            
+        } else if (strcmp(arg, "-noauto-bob-glob") == 0) {
+            options.useDefaultBobPatterns = false;
+        } else if (strcmp(arg, "-noauto-offset-glob") == 0) {
+            options.useDefaultOffsetPatterns = false;
         } else if (strcmp(arg, "-help") == 0) {
             printHelp(programName);
             return EXIT_SUCCESS;
@@ -243,6 +371,10 @@ int main(int argc, char** argv)
             for (; ++i<argc;) {
                 positionalArgs.push_back(argv[i]);
             }
+        } else if (arg[0] == '-' && arg[1] != '\0') {
+            fprintf(stderr, translate("Unknown parameter: %s\n").c_str(), arg);
+            printHint(argv[0]);
+            return EXIT_FAILURE;
         } else {
             positionalArgs.push_back(arg);
         }
@@ -259,6 +391,10 @@ int main(int argc, char** argv)
         inputFileName = 0;
     }
     
+    if (outputFileName && strcmp(outputFileName, "-") == 0) {
+        outputFileName = 0;
+    }
+    
     if (format[0] == '\0') {
         if (inputFileName) {
             const char* extension = strrchr(inputFileName, '.');
@@ -271,7 +407,8 @@ int main(int argc, char** argv)
                 return EXIT_FAILURE;
             }
         } else {
-            fprintf(stderr, translate("No input file nor format given.\nUse %s -help to get help.\n").c_str(), argv[0]);
+            fputs(translate("No input file name nor format given.\n").c_str(), stderr);
+            printHint(argv[0]);
             return EXIT_FAILURE;
         }
     }

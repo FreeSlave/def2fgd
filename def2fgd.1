@@ -4,8 +4,8 @@ def2fgd \- convert .def and .ent to .fgd
 .SH SYNOPSIS
 .B def2fgd
 .I [OPTIONS...]
-.I [input-file]
-.I [output-file]
+.I [INPUTE-FILE]
+.I [OUTPUT-FILE]
 .SH DESCRIPTION
 .B def2fgd
 converts GtkRadiant and NetRadiant .def 
@@ -17,24 +17,54 @@ Specify format of input. Valid values are def and ent.
 By default format is detected from input file extension.
 
 .TP
+\fB\-offset-glob pattern\fP
+Add an extra pattern for matching entity names that needs offset.
+
+Offset will be used in level editor when creating point entities in 3D view.
+
+Default patterns are weapon_*, item_*, ammo_*, info_player_deathmatch and info_player_start.
+
+.TP
+\fB-noauto-offset-glob\fP
+Don't use default patterns when setting offset, only explicitly added ones.
+
+.TP
+\fB-bobparms "x y z"\fP
+Set bob parameters for all bobbing entitites. Note that all three parameters should be passed as single argument, i.e. in pair quotes.
+
+If you don't know what bob parameters mean, but still want specific models (like weapons and items) to float and rotate, use just -bob.
+
+.TP
 \fB\-bob\fP
-automatically add bobparms for weapons, items and ammo
+Same as -bobparms "180 8 0". 
+
+This is good default since it makes models to float and rotate in 3D view of level editor the same way as they do in Quake III Arena and similar games.
+
+.TP
+\fB\-bob-glob pattern\fP
+Add an extra pattern for matching entity names that needs bobbing parameters.
+
+Default patterns are weapon_*, item_* and ammo_*.
+
+.TP
+\fB-noauto-bob-glob\fP
+Don't use default patterns when setting bob parameters, only explicitly added ones.
 
 .TP
 \fB\-help\fP
-Show help message and exit
+Show help message and exit.
 
 .TP
 \fB\-version\fP
-Show version information and exit
+Show version information and exit.
 
 .TP
 \fB\-\-\ [arguments...]\fP
-Treat the rest of arguments as positional arguments
+Treat the rest of arguments as positional arguments (i.e. not options).
 
-When no output-file given, standard output is used.
+When no INPUTE-FILE given or INPUTE-FILE is -, standard input is used.
 
-When no input-file given standard input is used.
+When no OUTPUT-FILE given or OUTPUT-FILE is -, standard output is used.
 
 .SH EXAMPLES
 
