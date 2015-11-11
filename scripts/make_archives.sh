@@ -20,18 +20,18 @@ CXXFLAGS="-O2 -fstack-protector-strong -Wformat -Werror=format-security -Wall"
 NAME="def2fgd-$VERSION"
 
 LINUX_M32_BIN=$FROM/bin/bin-m32
-make OBJ_DIR=$FROM/build/build-m32 BIN_DIR=$LINUX_M32_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m32 -static-libstdc++"
+make OBJ_DIR=$FROM/build/build-m32 BIN_DIR=$LINUX_M32_BIN CXXFLAGS="$CXXFLAGS -Wl,--gc-sections" USER_FLAGS="-m32 -static-libstdc++"
 LINUX_M32=$LINUX_M32_BIN/def2fgd
 strip $LINUX_M32
 $TAR $TO/$NAME-linux-i686.tar.gz -C $LINUX_M32_BIN def2fgd
 
-LINUX_M64_BIN=bin/bin-m64
-make OBJ_DIR=build/build-m64 BIN_DIR=$LINUX_M64_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m64 -static-libstdc++"
+LINUX_M64_BIN=$FROM/bin/bin-m64
+make OBJ_DIR=build/build-m64 BIN_DIR=$LINUX_M64_BIN CXXFLAGS="$CXXFLAGS -Wl,--gc-sections" USER_FLAGS="-m64 -static-libstdc++"
 LINUX_M64=$LINUX_M64_BIN/def2fgd
 strip $LINUX_M64
 $TAR $TO/$NAME-linux-amd64.tar.gz -C $LINUX_M64_BIN def2fgd
 
-WIN32_BIN=bin/bin-mingw
+WIN32_BIN=$FROM/bin/bin-mingw
 make OBJ_DIR=build/build-mingw BIN_DIR=$WIN32_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m32 -static" CXX=i586-mingw32msvc-g++ PROGRAM=def2fgd.exe
 WIN32=$WIN32_BIN/def2fgd.exe
 i586-mingw32msvc-strip $WIN32
