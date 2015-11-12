@@ -94,7 +94,7 @@ translations: $(MO_DIR)/ru/LC_MESSAGES/def2fgd.mo
 clean-translations:
 	rm -rf $(MO_DIR)
 
-install-tranlations:
+install-translations:
 	install -d $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
 	install -m644 $(MO_DIR)/ru/LC_MESSAGES/def2fgd.mo $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
 	

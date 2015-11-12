@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 00:30+0300\n"
+"POT-Creation-Date: 2015-11-12 19:09+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,66 +27,66 @@ msgstr ""
 msgid "Bob parameters already set to ( %d %d %d ). Remove redundant argument\n"
 msgstr ""
 
-#: src/main.cpp:301
+#: src/main.cpp:305
 msgid "-format option repetition\n"
 msgstr ""
 
-#: src/main.cpp:309
+#: src/main.cpp:313
 msgid "-format requires argument\n"
 msgstr ""
 
-#: src/main.cpp:336
+#: src/main.cpp:340
 msgid "-bobparms requires argument\n"
 msgstr ""
 
-#: src/main.cpp:344
+#: src/main.cpp:348
 msgid "-offset-glob requires argument\n"
 msgstr ""
 
-#: src/main.cpp:352
+#: src/main.cpp:356
 msgid "-bob-glob requires argument\n"
 msgstr ""
 
-#: src/main.cpp:371
+#: src/main.cpp:375
 #, c-format
 msgid "Unknown parameter: %s\n"
 msgstr ""
 
-#: src/main.cpp:402
+#: src/main.cpp:406
 msgid ""
 "Could not detect input format. Use -format option to explicitly set it.\n"
 msgstr ""
 
-#: src/main.cpp:406
+#: src/main.cpp:410
 msgid "No input file name nor format given.\n"
 msgstr ""
 
-#: src/main.cpp:421
+#: src/main.cpp:425
 #, c-format
 msgid "Could not open file %s for reading: %s\n"
 msgstr ""
 
-#: src/main.cpp:435
+#: src/main.cpp:439
 #, c-format
 msgid "Unknown format '%s'\n"
 msgstr ""
 
-#: src/main.cpp:442
+#: src/main.cpp:446
 #, c-format
 msgid "Could not open file %s for writing: %s\n"
 msgstr ""
 
-#: src/main.cpp:454
+#: src/main.cpp:458
 #, c-format
 msgid "%s:%d:%d: error: %s\n"
 msgstr ""
 
-#: src/main.cpp:456
+#: src/main.cpp:460
 #, c-format
 msgid "%d:%d: error: %s\n"
 msgstr ""
 
-#: src/main.cpp:463
+#: src/main.cpp:467
 #, c-format
 msgid "Error: %s\n"
 msgstr ""
