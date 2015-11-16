@@ -1,3 +1,5 @@
+def2fgd license
+
 Copyright (c) 2015 Roman Chistokhodov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
