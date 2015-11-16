@@ -320,7 +320,7 @@ int main(int argc, char** argv)
             }
             
             options.bobparms[0] = 180;
-            options.bobparms[1] = 80;
+            options.bobparms[1] = 8;
             options.bobparms[2] = 0;
             options.bob = true;
         } else if (strcmp(arg, "-bobparms") == 0) {

@@ -95,7 +95,7 @@ std::string descriptionLines(const std::string& description)
         if (toReturn.empty()) {
             toReturn = withoutQuotes(line);
         } else {
-            toReturn += "\\n";
+            toReturn += "\\n\\n";
             toReturn += withoutQuotes(line);
         }
     }
@@ -155,7 +155,7 @@ std::vector<Entity> readEntFile(std::istream& stream)
                 if (keyAttr && bitAttr)
                 {
                     size_t flagnum = static_cast<size_t>(strtol(bitAttr->value(), NULL, 10));
-                    if (flagnum >= 0 && flagnum < Entity::SpawnFlagNum)
+                    if (flagnum < Entity::SpawnFlagNum)
                     {
                         entity.spawnflags[flagnum] = valueString(keyAttr);
                         entity.flagsdescriptions[flagnum] = withoutQuotes(valueString(keyNode));
@@ -199,7 +199,7 @@ std::vector<Entity> readEntFile(std::istream& stream)
             }
             if (val.size()) {
                 if (entity.description.size()) {
-                    entity.description += "\\n";
+                    entity.description += "\\n\\n";
                 }
                 entity.description += descriptionLines(val);
             }

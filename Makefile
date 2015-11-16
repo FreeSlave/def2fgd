@@ -37,12 +37,7 @@ endif
 ifeq ($(LOCALEDIR),)
 
 else
-
-ifeq ($(LOCALEDIR),default)
-LOCALE_FLAGS+=-DLOCALEDIR=\"$(INSTALL_LOCALE_DIR)\"
-else
 LOCALE_FLAGS+=-DLOCALEDIR=\"$(LOCALEDIR)\"
-endif
 endif
 
 ifdef SystemRoot
