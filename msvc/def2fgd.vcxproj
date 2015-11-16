@@ -60,7 +60,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEF2FGD_VERSION="1.0";WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -78,6 +78,7 @@
     <ClCompile Include="..\src\entity.cpp" />
     <ClCompile Include="..\src\entreader.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\translate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\defreader.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="..\src\rapidxml-1.13\rapidxml_iterators.hpp" />
     <ClInclude Include="..\src\rapidxml-1.13\rapidxml_print.hpp" />
     <ClInclude Include="..\src\rapidxml-1.13\rapidxml_utils.hpp" />
+    <ClInclude Include="..\src\translate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

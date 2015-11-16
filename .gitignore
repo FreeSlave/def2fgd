@@ -8,6 +8,7 @@ build*
 bin*
 ipch
 *.suo
+*.opensdf
 *.sdf
 *.user
 *.opensd

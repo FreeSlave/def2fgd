@@ -38,7 +38,7 @@ namespace
             const char* start = current;
             while(current != end && (isdigit(*current) || *current == '.'))
                 current++;
-            color[i] = colorFromFloat(strtod(start, NULL));
+            color[i] = colorFromFloat(static_cast<float>(strtod(start, NULL)));
         }
     }
     

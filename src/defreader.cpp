@@ -290,7 +290,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                     start = it;
                                     it = skipFloat(it, end);
                                     std::string numstr(start, it);
-                                    entity.color[i] = colorFromFloat(strtod(numstr.c_str(), NULL));
+                                    entity.color[i] = colorFromFloat(static_cast<float>(strtod(numstr.c_str(), NULL)));
                                 }
                                 
                                 while(*it != ')')
