@@ -70,11 +70,34 @@ def2fgd \- переводит .def и .ent в .fgd
 
 .SH ПРИМЕРЫ
 
+.TP
 def2fgd entities.def entities.fgd
+Прочитать entitites.def и записать результат в entities.fgd.
 
+.TP
 def2fgd -format def - entities.fgd < entities.def
+Читать ищ стандартного потока ввода и записать результат в entities.fgd.
+При чтении из стандартного потока ввода формат входных даных должен быть указан явно.
 
+.TP
 def2fgd entities.def > entities.fgd
+Прочитать entities.def и вывести результат в стандартный поток вывода.
+
+.TP
+def2fgd -bob entities.def entities.fgd
+Добавить параметры вращения по умолчанию для оружия, предметов и боеприпасов.
+
+.TP
+def2fgd -bobparms "100 0 0" entities.def entities.fgd
+Назначить собственные параметры вращения оружия, предметов и боеприпасов.
+
+.TP
+def2fgd -noauto-offset-glob -offset-glob item_* -offset-glob weapon_* entities.def entities.fgd
+Добавить сдвиг только для энтить, чьи имена начинаются с item_ и weapon_
+
+.TP
+def2fgd -bob -bob-glob key_* -offset-glob key_* entities.def entities.fgd
+Добавить сдвиг и параметры вращения для энтитей, названия которых начинаются с key_, а также для тех, что соответствуют шаблонам по умолчанию.
 
 .SH АВТОР
 Roman Chistokhodov https://bitbucket.org/FreeSlave/
