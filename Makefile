@@ -45,7 +45,12 @@ LOCALE_FLAGS+=-DLOCALEDIR=\"$(LOCALEDIR)\"
 endif
 endif
 
-DEF2FGD_VERSION:=$(shell cat version)
+ifdef SystemRoot
+	DEF2FGD_VERSION:=1.0
+else
+	DEF2FGD_VERSION:=$(shell cat version)
+endif
+
 SOURCES=src/main.cpp src/defreader.cpp src/entity.cpp src/entreader.cpp
 
 all: make_obj_dir make_bin_dir $(TARGET)
