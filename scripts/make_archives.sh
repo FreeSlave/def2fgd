@@ -19,17 +19,17 @@ CXXFLAGS="-O2 -Wformat -Werror=format-security -Wall"
 
 NAME="def2fgd-$VERSION"
 
-# LINUX_M32_BIN=$FROM/bin/bin-m32
-# make OBJ_DIR=$FROM/build/build-m32 BIN_DIR=$LINUX_M32_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m32"
-# LINUX_M32=$LINUX_M32_BIN/def2fgd
-# strip $LINUX_M32
-# $TAR $TO/$NAME-linux-i686.tar.gz -C $FROM license.txt -C $LINUX_M32_BIN def2fgd
-# 
-# LINUX_M64_BIN=$FROM/bin/bin-m64
-# make OBJ_DIR=build/build-m64 BIN_DIR=$LINUX_M64_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m64"
-# LINUX_M64=$LINUX_M64_BIN/def2fgd
-# strip $LINUX_M64
-# $TAR $TO/$NAME-linux-amd64.tar.gz -C $FROM license.txt -C $LINUX_M64_BIN def2fgd
+LINUX_M32_BIN=$FROM/bin/bin-m32
+make OBJ_DIR=$FROM/build/build-m32 BIN_DIR=$LINUX_M32_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m32"
+LINUX_M32=$LINUX_M32_BIN/def2fgd
+strip $LINUX_M32
+$TAR $TO/$NAME-linux-i686.tar.gz -C $FROM license.txt -C $LINUX_M32_BIN def2fgd
+ 
+LINUX_M64_BIN=$FROM/bin/bin-m64
+make OBJ_DIR=build/build-m64 BIN_DIR=$LINUX_M64_BIN CXXFLAGS="$CXXFLAGS" USER_FLAGS="-m64"
+LINUX_M64=$LINUX_M64_BIN/def2fgd
+strip $LINUX_M64
+$TAR $TO/$NAME-linux-amd64.tar.gz -C $FROM license.txt -C $LINUX_M64_BIN def2fgd
 
 MINGW_X86=$(command -v i586-mingw32msvc-g++)
 MINGW_X86_STRIP=$(command -v i586-mingw32msvc-strip)
