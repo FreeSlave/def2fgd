@@ -3,9 +3,9 @@
 def2fgd \- convert .def and .ent to .fgd
 .SH SYNOPSIS
 .B def2fgd
-.I [OPTIONS...]
-.I [INPUTE-FILE]
-.I [OUTPUT-FILE]
+.I [options]
+.I [input-file]
+.I [output-file]
 .SH DESCRIPTION
 .B def2fgd
 converts .def and .ent files used by 
@@ -64,9 +64,9 @@ Show version information and exit.
 \fB\-\-\ [arguments...]\fP
 Treat the rest of arguments as positional arguments (i.e. not options).
 
-When no INPUTE-FILE given or INPUTE-FILE is -, standard input is used.
+When input-file is omitted or -, standard input is used.
 
-When no OUTPUT-FILE given or OUTPUT-FILE is -, standard output is used.
+When output-file is omitted or -, standard output is used.
 
 .SH EXAMPLES
 

@@ -241,13 +241,13 @@ void writefgd(std::ostream& stream, const std::vector<Entity>& entities, const F
 
 void printHelp(const char* programName)
 {
-    printf( "Usage: %s [OPTIONS...] [INPUT-FILE] [OUTPUT-FILE]\n"
+    printf( translate("Usage: %s [options] [input-file] [output-file]\n"
             "\n"
             "  -format format       specify format of input: def or ent\n"
             "\n"
             "  -offset-glob pattern add offset to entities matching given pattern;\n"
             "                       this option can be passed multiple times\n"
-            "  -noauto-offset-glob  don't use default patterns when setting offset;\n"
+            "  -noauto-offset-glob  don't use default patterns when setting offset\n"
             "\n"
             "  -bob                 same as -bobparms \"180 8 0\"\n"
             "  -bobparms \"x y z\"    set bob parameters\n"
@@ -259,8 +259,8 @@ void printHelp(const char* programName)
             "  -version             show version information and exit\n"
             "  -- [arguments...]    treat the rest of arguments as positional arguments\n"
             "\n"
-            "With no INPUT-FILE or when INPUT-FILE is -, read standard input.\n"
-            "With no OUTPUT-FILE or when OUTPUT-FILe is -, write to standard output.\n"
+            "When input-file is omitted or -, read standard input.\n"
+            "When output-file is omitted or -, write to standard output.\n").c_str()
     , programName);
 }
 
