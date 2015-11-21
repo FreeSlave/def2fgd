@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-21 14:31+0300\n"
+"POT-Creation-Date: 2015-11-21 20:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.cpp:244
+#: src/main.cpp:251
 #, c-format
 msgid ""
 "Usage: %s [options] [input-file] [output-file]\n"
@@ -42,76 +42,76 @@ msgid ""
 "When output-file is omitted or -, write to standard output.\n"
 msgstr ""
 
-#: src/main.cpp:274
+#: src/main.cpp:281
 #, c-format
 msgid "Use %s -help to get help.\n"
 msgstr ""
 
-#: src/main.cpp:279
+#: src/main.cpp:286
 #, c-format
 msgid "Bob parameters already set to ( %d %d %d ). Remove redundant argument\n"
 msgstr ""
 
-#: src/main.cpp:305
+#: src/main.cpp:312
 msgid "-format option repetition\n"
 msgstr ""
 
-#: src/main.cpp:313
+#: src/main.cpp:320
 msgid "-format requires argument\n"
 msgstr ""
 
-#: src/main.cpp:340
+#: src/main.cpp:347
 msgid "-bobparms requires argument\n"
 msgstr ""
 
-#: src/main.cpp:348
+#: src/main.cpp:355
 msgid "-offset-glob requires argument\n"
 msgstr ""
 
-#: src/main.cpp:356
+#: src/main.cpp:363
 msgid "-bob-glob requires argument\n"
 msgstr ""
 
-#: src/main.cpp:375
+#: src/main.cpp:382
 #, c-format
 msgid "Unknown parameter: %s\n"
 msgstr ""
 
-#: src/main.cpp:406
+#: src/main.cpp:413
 msgid ""
 "Could not detect input format. Use -format option to explicitly set it.\n"
 msgstr ""
 
-#: src/main.cpp:410
+#: src/main.cpp:417
 msgid "No input file name nor format given.\n"
 msgstr ""
 
-#: src/main.cpp:425
+#: src/main.cpp:432
 #, c-format
 msgid "Could not open file %s for reading: %s\n"
 msgstr ""
 
-#: src/main.cpp:439
+#: src/main.cpp:446
 #, c-format
 msgid "Unknown format '%s'\n"
 msgstr ""
 
-#: src/main.cpp:446
+#: src/main.cpp:453
 #, c-format
 msgid "Could not open file %s for writing: %s\n"
 msgstr ""
 
-#: src/main.cpp:458
+#: src/main.cpp:465
 #, c-format
 msgid "%s:%d:%d: error: %s\n"
 msgstr ""
 
-#: src/main.cpp:460
+#: src/main.cpp:467
 #, c-format
 msgid "%d:%d: error: %s\n"
 msgstr ""
 
-#: src/main.cpp:467
+#: src/main.cpp:474
 #, c-format
 msgid "Error: %s\n"
 msgstr ""

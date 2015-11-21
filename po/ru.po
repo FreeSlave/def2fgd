@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: def2fgd\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-21 14:31+0300\n"
+"POT-Creation-Date: 2015-11-21 20:08+0300\n"
 "PO-Revision-Date: 2015-11-10 01:47+0300\n"
 "Last-Translator: Roman Chistokhodov <freeslave93@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: src/main.cpp:244
+#: src/main.cpp:251
 #, c-format
 msgid ""
 "Usage: %s [options] [input-file] [output-file]\n"
@@ -64,84 +64,87 @@ msgstr ""
 "\n"
 "  -help                показать справку и выйти\n"
 "  -version             показать версию и выйти\n"
-"  -- [аргументы...]    считать оставшуюся часть параметров позиционными аргументами\n"
+"  -- [аргументы...]    считать оставшуюся часть параметров позиционными "
+"аргументами\n"
 "\n"
-"Когда входной файл не задан или равняется -, используется стандартный поток ввода.\n"
-"Когда выходной файл не задан или равняется -, используется стандартный поток вывода.\n"
+"Когда входной файл не задан или равняется -, используется стандартный поток "
+"ввода.\n"
+"Когда выходной файл не задан или равняется -, используется стандартный поток "
+"вывода.\n"
 
-#: src/main.cpp:274
+#: src/main.cpp:281
 #, c-format
 msgid "Use %s -help to get help.\n"
 msgstr "Используйте %s -help, чтобы получить помощь.\n"
 
-#: src/main.cpp:279
+#: src/main.cpp:286
 #, c-format
 msgid "Bob parameters already set to ( %d %d %d ). Remove redundant argument\n"
 msgstr ""
 "Параметры вращения уже установлен в ( %d %d %d ). Удалите лишний аргумент\n"
 
-#: src/main.cpp:305
+#: src/main.cpp:312
 msgid "-format option repetition\n"
 msgstr "Повторение опции -format\n"
 
-#: src/main.cpp:313
+#: src/main.cpp:320
 msgid "-format requires argument\n"
 msgstr "Опция -format ожидает аргумент\n"
 
-#: src/main.cpp:340
+#: src/main.cpp:347
 msgid "-bobparms requires argument\n"
 msgstr "Опция -bobparms ожидает аргумент\n"
 
-#: src/main.cpp:348
+#: src/main.cpp:355
 msgid "-offset-glob requires argument\n"
 msgstr "Опция -offset-glob ожидает аргумент\n"
 
-#: src/main.cpp:356
+#: src/main.cpp:363
 msgid "-bob-glob requires argument\n"
 msgstr "Опция -bob-glob ожидает аргумент\n"
 
-#: src/main.cpp:375
+#: src/main.cpp:382
 #, c-format
 msgid "Unknown parameter: %s\n"
 msgstr "Неизвестный параметр: %s\n"
 
-#: src/main.cpp:406
+#: src/main.cpp:413
 msgid ""
 "Could not detect input format. Use -format option to explicitly set it.\n"
 msgstr ""
 "Не удалось определить формат входных данных. Используйте опцию -format, "
 "чтобы явно задать формат.\n"
 
-#: src/main.cpp:410
+#: src/main.cpp:417
 msgid "No input file name nor format given.\n"
 msgstr "Не заданы ни имя входного файла, ни формат.\n"
 
-#: src/main.cpp:425
+#: src/main.cpp:432
 #, c-format
 msgid "Could not open file %s for reading: %s\n"
 msgstr "Не удалось открыть файл %s для чтения: %s\n"
 
-#: src/main.cpp:439
+#: src/main.cpp:446
 #, c-format
 msgid "Unknown format '%s'\n"
 msgstr "Неизвестный формат '%s'\n"
 
-#: src/main.cpp:446
+#: src/main.cpp:453
 #, c-format
 msgid "Could not open file %s for writing: %s\n"
 msgstr "Не удалось открыть файл %s для записи: %s\n"
 
-#: src/main.cpp:458
+#: src/main.cpp:465
 #, c-format
 msgid "%s:%d:%d: error: %s\n"
 msgstr "%s:%d:%d ошибка: %s\n"
 
-#: src/main.cpp:460
+#: src/main.cpp:467
 #, c-format
 msgid "%d:%d: error: %s\n"
 msgstr "%d:%d: ошибка: %s\n"
 
-#: src/main.cpp:467
+#: src/main.cpp:474
 #, c-format
 msgid "Error: %s\n"
 msgstr "Ошибка: %s\n"

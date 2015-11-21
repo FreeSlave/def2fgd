@@ -41,7 +41,7 @@ LOCALE_FLAGS+=-DLOCALEDIR=\"$(LOCALEDIR)\"
 endif
 
 ifdef SystemRoot
-	DEF2FGD_VERSION:=1.0
+	DEF2FGD_VERSION:=1.1
 else
 	DEF2FGD_VERSION:=$(shell cat version)
 endif
