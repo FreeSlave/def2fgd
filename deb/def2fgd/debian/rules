@@ -26,6 +26,7 @@ install: build
 	dh_installdirs
 	$(MAKE) DESTDIR="$(DESTDIR)" prefix=/usr install
 	$(MAKE) DESTDIR="$(DESTDIR)" prefix=/usr install-translations
+	$(MAKE) DESTDIR="$(DESTDIR)" prefix=/usr install-bash-completion
 binary-arch: build install
 	dh_testdir
 	dh_testroot

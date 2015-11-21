@@ -13,6 +13,8 @@ INSTALL_MAN_DIR=$(INSTALL_SHARE_DIR)/man
 INSTALL_MAN1_DIR=$(INSTALL_MAN_DIR)/man1
 INSTALL_LOCALE_DIR=$(INSTALL_SHARE_DIR)/locale
 
+INSTALL_BASH_COMPLETION_DIR=$(INSTALL_SHARE_DIR)/bash-completion/completions
+
 OBJS = \
 	$(OBJ_DIR)/main.o \
 	$(OBJ_DIR)/defreader.o \
@@ -101,3 +103,11 @@ install-translations:
 uninstall-translations:
 	rm $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES/def2fgd.mo
 	-rm -fd $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
+
+install-bash-completion:
+	install -d $(INSTALL_BASH_COMPLETION_DIR)
+	install -m644 bash_completion/def2fgd $(INSTALL_BASH_COMPLETION_DIR)
+
+uninstall-bash-completion:
+	rm $(INSTALL_BASH_COMPLETION_DIR)/def2fgd
+	-rm -fd $(INSTALL_BASH_COMPLETION_DIR)

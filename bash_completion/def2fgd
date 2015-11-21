@@ -1,0 +1,36 @@
+_def2fgd() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="-help -version -bob -bobparms -format -offset-glob -noauto-offset-glob -bob-glob -noauto-bob-glob"
+    
+    if [[ ${prev} == -format ]] ; then
+        COMPREPLY=( $(compgen -W "def ent" -- ${cur}) )
+        return 0
+    fi
+    
+    if [[ ${prev} == -offset-glob ]] ; then
+        COMPREPLY=( $(compgen -W "item_* weapon_* key_* ammo_* monster_* info_player_deathmatch info_player_start" -- ${cur}) )
+        return 0
+    fi
+    
+    if [[ ${prev} == -bob-glob ]] ; then
+        COMPREPLY=( $(compgen -W "item_* weapon_* key_* ammo_*" -- ${cur}) )
+        return 0
+    fi
+    
+    if [[ ${prev} == -bobparms ]] ; then
+        COMPREPLY=( "\"180 8 0\"" )
+        return 0
+    fi
+
+    if [[ ${cur} == -* ]] ; then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    else
+        _filedir
+    fi
+}
+complete -F _def2fgd def2fgd
