@@ -152,6 +152,13 @@ void writefgd(std::ostream& stream, const std::vector<Entity>& entities, const F
                 
                 if (!entity.model.empty()) {
                     stream << "studio(\"" << entity.model << "\") ";
+                } else {
+                    for (size_t j=0; j<entity.keys.size(); ++j) {
+                        if (entity.keys[j].name == "model" || entity.keys[j].name == "model2") {
+                            stream << "studio() ";
+                            break;
+                        }
+                    }
                 }
             }
         }
