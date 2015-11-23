@@ -1,7 +1,7 @@
 Name:           def2fgd
 Version:        1.1
 Release:        1%{?dist}
-Summary:        A small tool to convert .def and .ent files to .fgd.
+Summary:        A small tool to convert .def and .ent files to .fgd
 
 License:        MIT
 URL:            https://bitbucket.org/FreeSlave/%{name}
@@ -10,7 +10,9 @@ Source0:        https://bitbucket.org/FreeSlave/%{name}/downloads/%{name}-%{vers
 BuildRequires:  gcc-c++ gettext
 
 %description
-def2fgd converts .def.and .ent files used by GtkRadiant and Netradiant to .fgd used by Jackhammer editor.
+def2fgd converts .def.and .ent files 
+used by GtkRadiant and Netradiant to .fgd 
+used by Jackhammer editor.
 
 %prep
 %setup -q
@@ -24,9 +26,11 @@ make translations
 %install
 make DESTDIR=%{buildroot} prefix=/usr install 
 make DESTDIR=%{buildroot} prefix=/usr install-translations
+make DESTDIR=%{buildroot} prefix=/usr install-bash-completion
 %find_lang %{name}
 
 %files -f %{name}.lang
+%{_datadir}/bash-completion/completions/%{name}
 %{_bindir}/%{name}
 
 %doc license.txt
@@ -34,7 +38,7 @@ make DESTDIR=%{buildroot} prefix=/usr install-translations
 
 
 %changelog
-* Thu Nov 21 2015 Roman Chistokhodov 1.1-1
+* Mon Nov 23 2015 Roman Chistokhodov 1.1-1
 - New version
 * Thu Nov 12 2015 Roman Chistokhodov 1.0-1
 - Initial release

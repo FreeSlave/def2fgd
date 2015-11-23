@@ -3,7 +3,7 @@
 VERSION=$(cat version)
 
 mkdir -p rpm/def2fgd-$VERSION
-cp -r Makefile src/ *.1 po/ version license.txt rpm/def2fgd-$VERSION
+cp -r Makefile src/ *.1 po/ version license.txt bash_completion/ rpm/def2fgd-$VERSION
 
 ARCHIVE=def2fgd-$VERSION.tar.gz
 
