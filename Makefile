@@ -102,7 +102,7 @@ install-translations:
 	
 uninstall-translations:
 	rm $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES/def2fgd.mo
-	-rm -fd $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
+	-rmdir $(INSTALL_LOCALE_DIR)/ru/LC_MESSAGES
 
 install-bash-completion:
 	install -d $(INSTALL_BASH_COMPLETION_DIR)
@@ -110,4 +110,4 @@ install-bash-completion:
 
 uninstall-bash-completion:
 	rm $(INSTALL_BASH_COMPLETION_DIR)/def2fgd
-	-rm -fd $(INSTALL_BASH_COMPLETION_DIR)
+	-rmdir $(INSTALL_BASH_COMPLETION_DIR)
