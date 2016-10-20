@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 ZIP="zip -qj"
 TAR="tar -czf"
 
@@ -10,12 +12,12 @@ if [ ! -d "$1" ]; then
     exit 1
 fi
 
-FROM=$CUR/..
+FROM=$CUR
 TO=$(readlink -f -- "$1")
 
 VERSION=$(cat $FROM/version)
 
-CXXFLAGS="-O2 -Wformat -Werror=format-security -Wall"
+CXXFLAGS="-O2 -Wformat -Werror=format-security -Wall -static-libstdc++"
 
 NAME="def2fgd-$VERSION"
 

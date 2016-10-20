@@ -11,6 +11,8 @@ INSTALL_BIN_DIR=$(DESTDIR)$(prefix)/bin
 INSTALL_SHARE_DIR=$(DESTDIR)$(prefix)/share
 INSTALL_MAN_DIR=$(INSTALL_SHARE_DIR)/man
 INSTALL_MAN1_DIR=$(INSTALL_MAN_DIR)/man1
+INSTALL_RU_MAN_DIR=$(INSTALL_MAN_DIR)/ru
+INSTALL_RU_MAN1_DIR=$(INSTALL_RU_MAN_DIR)/man1
 INSTALL_LOCALE_DIR=$(INSTALL_SHARE_DIR)/locale
 
 INSTALL_BASH_COMPLETION_DIR=$(INSTALL_SHARE_DIR)/bash-completion/completions
@@ -25,6 +27,7 @@ OBJS = \
 INCLUDE=-I$(SRC_DIR)/rapidxml-1.13
 PROGRAM=def2fgd
 MAN1=def2fgd.1
+RU_MAN1=def2fgd.ru.1
 TARGET=$(BIN_DIR)/$(PROGRAM)
 
 ifeq ($(USE_LOCALE),gettext)
@@ -43,7 +46,7 @@ LOCALE_FLAGS+=-DLOCALEDIR=\"$(LOCALEDIR)\"
 endif
 
 ifdef SystemRoot
-	DEF2FGD_VERSION:=1.1
+	DEF2FGD_VERSION:=$(shell more version)
 else
 	DEF2FGD_VERSION:=$(shell cat version)
 endif
@@ -71,13 +74,15 @@ distclean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 install:
-	install -d $(INSTALL_BIN_DIR) $(INSTALL_MAN1_DIR)
+	install -d $(INSTALL_BIN_DIR) $(INSTALL_MAN1_DIR) $(INSTALL_RU_MAN1_DIR)
 	install $(TARGET) $(INSTALL_BIN_DIR)
 	install -m644 $(MAN1) $(INSTALL_MAN1_DIR)
+	install -m644 $(RU_MAN1) $(INSTALL_RU_MAN1_DIR)/$(MAN1)
 
 uninstall:
 	rm $(INSTALL_BIN_DIR)/$(PROGRAM)
 	rm $(INSTALL_MAN1_DIR)/$(MAN1)
+	rm $(INSTALL_RU_MAN1_DIR)/$(MAN1)
 
 update-po: $(PO_DIR)/ru.po
 	
