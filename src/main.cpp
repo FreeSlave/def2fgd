@@ -368,10 +368,10 @@ int main(int argc, char** argv)
             options.useDefaultBobPatterns = false;
         } else if (strcmp(arg, "-noauto-offset-glob") == 0) {
             options.useDefaultOffsetPatterns = false;
-        } else if (strcmp(arg, "-help") == 0) {
+        } else if (strcmp(arg, "-help") == 0 || strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
             printHelp(programName);
             return EXIT_SUCCESS;
-        } else if (strcmp(arg, "-version") == 0) {
+        } else if (strcmp(arg, "-version") == 0 || strcmp(arg, "--version") == 0) {
             printVersion();
             return EXIT_SUCCESS;
         } else if (strcmp(arg, "--") == 0) {
