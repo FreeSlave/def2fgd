@@ -11,5 +11,5 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: convert .def and .ent to .fgd
  def2fgd converts .def.and .ent files 
  used by GtkRadiant and Netradiant to .fgd 
- used by Jackhammer editor.
+ used by J.A.C.K. editor.
  

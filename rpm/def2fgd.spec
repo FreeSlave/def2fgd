@@ -12,7 +12,7 @@ BuildRequires:  gcc-c++ gettext
 %description
 def2fgd converts .def.and .ent files 
 used by GtkRadiant and Netradiant to .fgd 
-used by Jackhammer editor.
+used by J.A.C.K. editor.
 
 %prep
 %setup -q
