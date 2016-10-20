@@ -39,6 +39,8 @@ make DESTDIR=%{buildroot} prefix=/usr install-bash-completion
 
 
 %changelog
+* Thu Oct 20 2016 Roman Chistokhodov 1.2-1
+- New version
 * Mon Nov 23 2015 Roman Chistokhodov 1.1-1
 - New version
 * Thu Nov 12 2015 Roman Chistokhodov 1.0-1
