@@ -13,6 +13,7 @@ ARCHIVE=./deb/def2fgd_$VERSION.orig.tar.gz
 create_orig()
 {
     tar czf "$ARCHIVE" $FILES --transform="s|\\./|def2fgd/|"
+    rm -rf deb/def2fgd/debian/def2fgd
     find deb/def2fgd -mindepth 1 -maxdepth 1 -not -name 'debian' -exec rm -rf {} +
     tar xf "$ARCHIVE" --directory ./deb
 }
