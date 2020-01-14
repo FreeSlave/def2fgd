@@ -73,14 +73,19 @@ clean:
 distclean: 
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-install:
-	install -d $(INSTALL_BIN_DIR) $(INSTALL_MAN1_DIR) $(INSTALL_RU_MAN1_DIR)
+install-bin:
+	install -d $(INSTALL_BIN_DIR)
 	install $(TARGET) $(INSTALL_BIN_DIR)
+
+uninstall-bin:
+	rm $(INSTALL_BIN_DIR)/$(PROGRAM)
+
+install-man:
+	install -d $(INSTALL_MAN1_DIR) $(INSTALL_RU_MAN1_DIR)
 	install -m644 $(MAN1) $(INSTALL_MAN1_DIR)
 	install -m644 $(RU_MAN1) $(INSTALL_RU_MAN1_DIR)/$(MAN1)
 
-uninstall:
-	rm $(INSTALL_BIN_DIR)/$(PROGRAM)
+uninstall-man:
 	rm $(INSTALL_MAN1_DIR)/$(MAN1)
 	rm $(INSTALL_RU_MAN1_DIR)/$(MAN1)
 
@@ -116,3 +121,7 @@ install-bash-completion:
 uninstall-bash-completion:
 	rm $(INSTALL_BASH_COMPLETION_DIR)/def2fgd
 	-rmdir $(INSTALL_BASH_COMPLETION_DIR)
+
+install: install-bin install-man install-translations install-bash-completion
+
+uninstall: uninstall-bin uninstall-man uninstall-translations uninstall-bash-completion
