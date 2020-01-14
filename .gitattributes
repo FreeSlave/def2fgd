@@ -1,0 +1,5 @@
+.gitattributes export-ignore
+.gitignore export-ignore
+msvc/ export-ignore
+make_archives.sh export-ignore
+src/rapidxml-1.13/manual.html export-ignore
