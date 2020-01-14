@@ -2,6 +2,11 @@ def2fgd is tool for converting .def and .ent files used by GtkRadiant and Netrad
 
 [![Build Status](https://travis-ci.org/FreeSlave/def2fgd.svg?branch=master)](https://travis-ci.org/FreeSlave/def2fgd)
 
+# Download
+
+Portable versions for Windows and Linux: [Releases](https://github.com/FreeSlave/def2fgd/releases).
+Packages for some Linux distros: [OBS](https://software.opensuse.org//download.html?project=home%3AFreeSlave&package=def2fgd).
+
 # Usage
 
 Open terminal and type:
