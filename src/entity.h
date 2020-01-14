@@ -22,7 +22,7 @@ struct Key
 struct Entity
 {
     enum {SpawnFlagNum = 32};
-    
+
     Entity();
     std::string name;
     std::string description;
@@ -33,7 +33,7 @@ struct Entity
     int box[6];
     bool solid;
     std::string model;
-    
+
     bool hasKey(const std::string& name) const;
 };
 

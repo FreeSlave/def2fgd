@@ -21,12 +21,12 @@ std::string withoutQuotes(std::string str)
 
 Key::Key(const std::string& keyname, const std::string& keydescription) : name(keyname), description(keydescription)
 {
-    
+
 }
 
 Key::Key(const std::string& keyname, const std::string& keydescription, const std::string& keytype) : name(keyname), description(keydescription), type(keytype)
 {
-    
+
 }
 
 Entity::Entity() : solid(false)

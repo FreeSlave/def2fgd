@@ -13,17 +13,17 @@ namespace
 {
     const char* const quakedstr = "QUAKED";
     size_t quakednum = 6;
-    std::string unexpectedEndOfFile() { 
-        return translate("Unexpected end of line"); 
+    std::string unexpectedEndOfFile() {
+        return translate("Unexpected end of line");
     };
-    
+
     static std::string::iterator skipSpaces(std::string::iterator current, const std::string::iterator& end)
     {
         while(current != end && isspace(*current))
             current++;
         return current;
     }
-    
+
     static std::string::iterator skipAlpha(std::string::iterator current, const std::string::iterator& end)
     {
         while(current != end && (isalnum(*current) || *current == '_'))
@@ -97,7 +97,7 @@ namespace
         }
         return it;
     }
-    
+
     static void stripRight(std::string& str)
     {
         if (str.size() && str[str.size()-1] == '\r') {
@@ -108,7 +108,7 @@ namespace
 
 DefReadError::DefReadError(const std::string& what, size_t line, size_t column) : std::runtime_error(what), _line(line), _column(column)
 {
-    
+
 }
 
 size_t DefReadError::line() const
@@ -124,30 +124,30 @@ size_t DefReadError::column() const
 std::vector<Entity> readDefFile(std::istream& stream)
 {
     std::vector<Entity> toReturn;
-    
+
     bool inKeys = false;
     bool shouldPush = false;
     size_t lineNum = 0;
     std::string line;
-    
+
     Entity entity;
-    
+
     while(getline(stream, line))
     {
         stripRight(line);
         lineNum++;
-        
+
         if (line.empty()) {
             continue;
         }
-        
+
         if (shouldPush) {
             toReturn.push_back(entity);
             entity = Entity();
             inKeys = false;
             shouldPush = false;
         }
-        
+
         if (inKeys) {
             if (line.size() > 1)
             {
@@ -159,22 +159,22 @@ std::vector<Entity> readDefFile(std::istream& stream)
                 }
             }
         }
-        
+
         std::string::iterator it = line.begin();
         std::string::iterator begin = line.begin();
         std::string::iterator end = line.end();
         std::string::iterator start = it;
-        
-        
+
+
         if (inKeys) {
             if (isalpha(line[0]) || line[0] == '_' || line[0] == '\"')
-            {   
+            {
                 if (it != end && *it == '\"') {
                     it++;
                 }
-                
+
                 start = it;
-                
+
                 std::string keyname;
                 if (*begin == '\"') {
                     while(it != end && *it != '\"') {
@@ -190,20 +190,20 @@ std::vector<Entity> readDefFile(std::istream& stream)
                     it = skipAlpha(it, end);
                     keyname = std::string(start, it);
                 }
-                
+
                 it = skipSpaces(it, end);
                 std::string* found = std::find(entity.spawnflags, entity.spawnflags+Entity::SpawnFlagNum, keyname);
                 if (found != entity.spawnflags+Entity::SpawnFlagNum) {
-                    
+
                     if (it != end && *it == ':') {
                         it++;
                         it = skipSpaces(it, end);
                     }
-                    
+
                     entity.flagsdescriptions[found-entity.spawnflags] = withoutQuotes(std::string(it, end));
                     continue;
                 }
-                
+
                 if (keyname == "model" && *it == '=')
                 {
                     it++;
@@ -241,16 +241,16 @@ std::vector<Entity> readDefFile(std::istream& stream)
                             }
                             continue;
                         }
-                    } 
+                    }
                     if (it != end && (*it == ':' || *begin == '\"'))
                     {
                         if (*it == ':') {
                             it++;
                         }
                         it = skipSpaces(it, end);
-                        
+
                         std::string description = withoutQuotes(std::string(it, end));
-                        
+
                         entity.keys.push_back(Key(keyname, description));
                     }
                 }
@@ -277,7 +277,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                         start = it;
                         it = skipAlpha(it, end);
                         entity.name = std::string(start, it);
-                        
+
                         it = skipSpaces(it, end);
                         if (it != end)
                         {
@@ -292,7 +292,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                     std::string numstr(start, it);
                                     entity.color[i] = colorFromFloat(static_cast<float>(strtod(numstr.c_str(), NULL)));
                                 }
-                                
+
                                 while(*it != ')')
                                 {
                                     it++;
@@ -314,7 +314,7 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                     }
                                     it = skipSpaces(it, end);
                                     readFlags(it, lineNum, begin, end, entity.spawnflags);
-                                    
+
                                     inKeys = true;
                                 }
                                 else
@@ -336,11 +336,11 @@ std::vector<Entity> readDefFile(std::istream& stream)
             }
         }
     }
-    
+
     if (shouldPush) {
         toReturn.push_back(entity);
         entity = Entity();
     }
-    
+
     return toReturn;
 }

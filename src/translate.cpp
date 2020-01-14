@@ -28,7 +28,7 @@ std::string translate_n(const char* single, const char* mult, unsigned long int 
 void generateLocale(const char* package, const char* localeDir, const char* locale)
 {
     boost::locale::generator gen;
-    
+
     gen.add_messages_path(localeDir);
     gen.add_messages_domain(package);
     std::locale::global(gen(locale));

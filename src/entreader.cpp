@@ -21,12 +21,12 @@ namespace
     {
         return strncmp(elem->name(), name, elem->name_size()) == 0;
     }
-    
+
     static std::string valueString(xml_base<>* elem)
     {
         return std::string(elem->value(), elem->value_size());
     }
-    
+
     static void readColor(const char* begin, size_t size, unsigned* color)
     {
         const char* end = begin + size;
@@ -41,7 +41,7 @@ namespace
             color[i] = colorFromFloat(static_cast<float>(strtod(start, NULL)));
         }
     }
-    
+
     static void readBox(const char* begin, size_t size, int* box)
     {
         const char* end = begin + size;
@@ -56,7 +56,7 @@ namespace
             box[i] = static_cast<int>(strtol(start, NULL, 10));
         }
     }
-    
+
     static const char* entTypeToFgdType(const char* type, size_t size)
     {
         if (strncmp(type, "angles", size) == 0)
@@ -77,7 +77,7 @@ std::string descriptionLines(const std::string& description)
 {
     std::string toReturn;
     std::istringstream stream(description);
-    
+
     std::string line;
     while(getline(stream, line))
     {
@@ -87,11 +87,11 @@ std::string descriptionLines(const std::string& description)
                 sectionName = sectionName && line[i] == '-';
             }
         }
-        
+
         if (sectionName) { //probably something like -------- KEYS --------. Just skip.
             continue;
         }
-        
+
         if (toReturn.empty()) {
             toReturn = withoutQuotes(line);
         } else {
@@ -99,59 +99,59 @@ std::string descriptionLines(const std::string& description)
             toReturn += withoutQuotes(line);
         }
     }
-    
+
     return toReturn;
 }
 
 std::vector<Entity> readEntFile(std::istream& stream)
-{   
+{
     std::vector<char> input((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
     std::vector<Entity> toReturn;
-    
+
     xml_document<> doc;
     doc.parse<parse_trim_whitespace>(&input[0]);
-    
+
     xml_node<>* classes = doc.first_node("classes");
     if (!classes)
         throw std::runtime_error(translate("No 'classes' entry found"));
-    
+
     for (xml_node<>* entityNode = classes->first_node(); entityNode; entityNode = entityNode->next_sibling())
     {
         Entity entity;
-        
+
         entity.description = descriptionLines(std::string(entityNode->value(), entityNode->value_size()));
-        
+
         if (hasName(entityNode, "point"))
             entity.solid = false;
         else if (hasName(entityNode, "group"))
             entity.solid = true;
-        
+
         xml_attribute<>* nameAttr = entityNode->first_attribute("name");
         if (!nameAttr)
             continue; // no name, nothing to do here
-        
+
         entity.name = valueString(nameAttr);
-        
+
         xml_attribute<>* colorAttr = entityNode->first_attribute("color");
         if (colorAttr)
             readColor(colorAttr->value(), colorAttr->value_size(), entity.color);
-        
+
         xml_attribute<>* boxAttr = entityNode->first_attribute("box");
         if (boxAttr)
             readBox(boxAttr->value(), boxAttr->value_size(), entity.box);
-        
+
         xml_attribute<>* modelAttr = entityNode->first_attribute("model");
         if (modelAttr) {
             entity.model = valueString(modelAttr);
         }
-        
+
         for (xml_node<>* keyNode = entityNode->first_node(); keyNode; keyNode = keyNode->next_sibling())
         {
             if (hasName(keyNode, "flag"))
             {
                 xml_attribute<>* keyAttr = keyNode->first_attribute("key");
                 xml_attribute<>* bitAttr = keyNode->first_attribute("bit");
-                
+
                 if (keyAttr && bitAttr)
                 {
                     size_t flagnum = static_cast<size_t>(strtol(bitAttr->value(), NULL, 10));
@@ -168,14 +168,14 @@ std::vector<Entity> readEntFile(std::istream& stream)
                 if (keyAttr)
                 {
                     entity.keys.push_back(Key(
-                        valueString(keyAttr), 
-                        withoutQuotes(valueString(keyNode)), 
+                        valueString(keyAttr),
+                        withoutQuotes(valueString(keyNode)),
                         entTypeToFgdType(keyNode->name(), keyNode->name_size())
                     ));
                 }
             }
         }
-        
+
         xml_node<>* lastNode = entityNode->last_node();
         if (lastNode && lastNode->name_size() == 0)
         {
@@ -204,9 +204,9 @@ std::vector<Entity> readEntFile(std::istream& stream)
                 entity.description += descriptionLines(val);
             }
         }
-        
+
         toReturn.push_back(entity);
     }
-    
+
     return toReturn;
 }
