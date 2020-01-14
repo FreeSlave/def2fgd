@@ -91,3 +91,7 @@ Being on GNU/Linux it's possible to build def2fgd for both GNU/Linux x86 and x86
     ./make_archives archives
 
 .tar.gz archives for GNU/Linux and .zip archives for MS Windows should appear in **archives** directory.
+
+## Packaging
+
+Everything related to def2fgd packaging for specific distros happens here [here](https://github.com/FreeSlave/def2fgd-distro).
