@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         cxx: [g++, clang++]
-        make: make
+        make: [make]
         include:
           - os: windows-latest
             cxx: g++
