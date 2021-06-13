@@ -7,12 +7,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-latest]
+        make: [make]
         include:
           - os: windows-latest
-            cxx: g++
             make: mingw32-make
-    env:
-      CXX: ${{ matrix.cxx }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
