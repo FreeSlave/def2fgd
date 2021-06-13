@@ -7,13 +7,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        cxx: [g++, clang++]
-        make: [make]
         include:
           - os: windows-latest
             cxx: g++
-            make: mingw64-make
+            make: mingw32-make
     env:
       CXX: ${{ matrix.cxx }}
     steps:
