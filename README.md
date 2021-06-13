@@ -1,6 +1,6 @@
 def2fgd is tool for converting .def and .ent files used by GtkRadiant and Netradiant to .fgd files used by J.A.C.K.
 
-[![Build Status](https://travis-ci.org/FreeSlave/def2fgd.svg?branch=master)](https://travis-ci.org/FreeSlave/def2fgd)
+[![Build Status](https://github.com/FreeSlave/def2fgd/actions/workflows/.github.yml/badge.svg?branch=master)](https://github.com/FreeSlave/def2fgd/actions/workflows/.github.yml)
 
 # Download
 
