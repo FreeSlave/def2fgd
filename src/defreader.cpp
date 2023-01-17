@@ -45,7 +45,7 @@ namespace
         return current;
     }
 
-    static std::string::iterator readBox(std::string::iterator it, size_t lineNum, const std::string::iterator& begin, const std::string::iterator& end, int* size)
+    static std::string::iterator readBox(std::string::iterator it, size_t lineNum, const std::string::iterator& begin, const std::string::iterator& end, int* size, int defaultSize)
     {
         if (*it == '(')
         {
@@ -71,6 +71,11 @@ namespace
                 it++;
                 return it;
             }
+        }
+        else
+        {
+            size[0] = size[1] = size[2] = defaultSize;
+            return it;
         }
         throw DefReadError(translate("Unexpected symbol"), lineNum, it-begin);
     }
@@ -308,9 +313,9 @@ std::vector<Entity> readDefFile(std::istream& stream)
                                         entity.solid = true;
                                         it++;
                                     } else {
-                                        it = readBox(it, lineNum, begin, end, entity.box);
+                                        it = readBox(it, lineNum, begin, end, entity.box, -8);
                                         it = skipSpaces(it, end);
-                                        it = readBox(it, lineNum, begin, end, entity.box+3);
+                                        it = readBox(it, lineNum, begin, end, entity.box+3, 8);
                                     }
                                     it = skipSpaces(it, end);
                                     readFlags(it, lineNum, begin, end, entity.spawnflags);
