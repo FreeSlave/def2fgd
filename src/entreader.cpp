@@ -176,32 +176,35 @@ std::vector<Entity> readEntFile(std::istream& stream)
             }
         }
 
-        xml_node<>* lastNode = entityNode->last_node();
-        if (lastNode && lastNode->name_size() == 0)
+        if (entityNode->first_node())
         {
-            std::string val = valueString(lastNode);
-            size_t pos = val.find("modeldisabled=");
-            if (pos != std::string::npos && entity.model.empty())
+            xml_node<>* lastNode = entityNode->last_node();
+            if (lastNode && lastNode->name_size() == 0)
             {
-                std::string::iterator it = val.begin() + pos + strlen("modeldisabled=");
-                if (*it == '"')
+                std::string val = valueString(lastNode);
+                size_t pos = val.find("modeldisabled=");
+                if (pos != std::string::npos && entity.model.empty())
                 {
-                    it++;
-                    std::string::iterator start = it;
-                    while(it != val.end() && *it != '"')
+                    std::string::iterator it = val.begin() + pos + strlen("modeldisabled=");
+                    if (*it == '"')
+                    {
                         it++;
-                    std::string modelname(start, it);
-                    entity.model = modelname;
+                        std::string::iterator start = it;
+                        while(it != val.end() && *it != '"')
+                            it++;
+                        std::string modelname(start, it);
+                        entity.model = modelname;
+                    }
                 }
-            }
-            if (pos != std::string::npos) {
-                val.resize(pos);
-            }
-            if (val.size()) {
-                if (entity.description.size()) {
-                    entity.description += "\\n\\n";
+                if (pos != std::string::npos) {
+                    val.resize(pos);
                 }
-                entity.description += descriptionLines(val);
+                if (val.size()) {
+                    if (entity.description.size()) {
+                        entity.description += "\\n\\n";
+                    }
+                    entity.description += descriptionLines(val);
+                }
             }
         }
 
